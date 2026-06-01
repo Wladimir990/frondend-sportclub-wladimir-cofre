@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Dashboard | SportClub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,600;0,700;0,800;0,900;1,700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="dashboard-body" data-role="usuario">
+
+<!-- ═══ HEADER ═══ -->
+<header class="db-header">
+    <div class="container db-header__inner">
+        <a href="../index.html" class="db-logo db-logo--img">
+            <img src="../assets/img/logo.png" alt="SportClub" class="db__logo-img">
+        </a>
+        <div class="db-header__actions">
+            <a href="#" class="db-action-btn">👤 Mi Perfil</a>
+            <a href="../index.html" class="db-action-btn db-action-btn--logout">→ Cerrar Sesión</a>
+        </div>
+    </div>
+</header>
+
+<div class="db-layout">
+
+    <!-- ═══ SIDEBAR ═══ -->
+    <aside class="db-sidebar">
+        <div class="db-nav-section">
+            <span class="db-nav-label">Principal</span>
+            <nav>
+                <ul>
+                    <li>
+                        <a href="#" class="db-nav-link active">
+                            <span class="db-nav-icon">🏠</span> Inicio
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="db-nav-link">
+                            <span class="db-nav-icon">📅</span> Reservas
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="db-nav-link">
+                            <span class="db-nav-icon">🏋️</span> Clases
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="db-nav-link">
+                            <span class="db-nav-icon">👤</span> Mi Perfil
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div class="db-nav-section">
+            <span class="db-nav-label">Soporte</span>
+            <nav>
+                <ul>
+                    <li>
+                        <a href="#" class="db-nav-link">
+                            <span class="db-nav-icon">❓</span> Ayuda
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="db-nav-link">
+                            <span class="db-nav-icon">📞</span> Contacto
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </aside>
+
+    <!-- ═══ CONTENIDO PRINCIPAL ═══ -->
+    <main class="db-main">
+
+        <!-- Cabecera de página -->
+        <div class="db-page-header">
+            <div>
+                <h1 class="db-page-title">💪 ¡Bienvenido, Javier!</h1>
+                <p class="db-page-sub">"Continúa entrenando para alcanzar tus metas. ¡Hoy es un gran día para superarte!"</p>
+            </div>
+            <a href="#" class="btn btn--role btn--sm">+ Nueva reserva</a>
+        </div>
+
+        <!-- Stats rápidas -->
+        <div class="db-stats-grid">
+            <div class="db-stat-card">
+                <span class="db-stat-label">Clases este mes</span>
+                <span class="db-stat-num">12</span>
+                <span class="db-stat-sub">↑ 3 más que el mes anterior</span>
+            </div>
+            <div class="db-stat-card">
+                <span class="db-stat-label">Reservas activas</span>
+                <span class="db-stat-num">5</span>
+                <span class="db-stat-sub">Próxima: Lunes 19:00</span>
+            </div>
+            <div class="db-stat-card">
+                <span class="db-stat-label">Días activo</span>
+                <span class="db-stat-num">38</span>
+                <span class="db-stat-sub">Desde tu ingreso</span>
+            </div>
+        </div>
+
+        <!-- Tabla de reservas (mínimo 5) -->
+        <h2 class="db-section-title">📌 Mis próximas reservas</h2>
+        <div class="db-table-wrap">
+            <table class="db-table">
+                <thead>
+                    <tr>
+                        <th>Clase</th>
+                        <th>Día</th>
+                        <th>Hora</th>
+                        <th>Coach asignado</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Funcional HIIT</td>
+                        <td>Lunes</td>
+                        <td>19:00</td>
+                        <td>Coach Ana López</td>
+                        <td><span class="badge badge--green">Confirmada</span></td>
+                    </tr>
+                    <tr>
+                        <td>Yoga Flow</td>
+                        <td>Martes</td>
+                        <td>18:30</td>
+                        <td>Coach Carla Muñoz</td>
+                        <td><span class="badge badge--green">Confirmada</span></td>
+                    </tr>
+                    <tr>
+                        <td>Spinning</td>
+                        <td>Miércoles</td>
+                        <td>20:00</td>
+                        <td>Coach Felipe Vega</td>
+                        <td><span class="badge badge--green">Confirmada</span></td>
+                    </tr>
+                    <tr>
+                        <td>Boxeo Técnico</td>
+                        <td>Jueves</td>
+                        <td>19:00</td>
+                        <td>Coach Marcos Ruiz</td>
+                        <td><span class="badge badge--yellow">Pendiente</span></td>
+                    </tr>
+                    <tr>
+                        <td>Crossfit</td>
+                        <td>Sábado</td>
+                        <td>11:00</td>
+                        <td>Coach Diego Torres</td>
+                        <td><span class="badge badge--green">Confirmada</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Clases disponibles (mínimo 3 cards con ícono, nombre, descripción y botón) -->
+        <h2 class="db-section-title">🏆 Clases disponibles</h2>
+        <div class="db-cards-grid">
+            <div class="db-card">
+                <span class="db-card__icon">🏋️</span>
+                <h3 class="db-card__title">Funcional Avanzado</h3>
+                <p class="db-card__desc">Entrenamiento de alta intensidad para quemar grasa y ganar masa muscular. Ideal para niveles intermedios y avanzados.</p>
+                <a href="#" class="btn btn--role btn--sm">Reservar clase</a>
+            </div>
+            <div class="db-card">
+                <span class="db-card__icon">🧘</span>
+                <h3 class="db-card__title">Yoga &amp; Meditación</h3>
+                <p class="db-card__desc">Conecta mente y cuerpo, reduce el estrés y mejora tu flexibilidad con técnicas de respiración guiada.</p>
+                <a href="#" class="btn btn--role btn--sm">Reservar clase</a>
+            </div>
+            <div class="db-card">
+                <span class="db-card__icon">🥊</span>
+                <h3 class="db-card__title">Boxeo Técnico</h3>
+                <p class="db-card__desc">Aprende defensa personal, mejora tus reflejos y quema calorías con esta disciplina completa para todo el cuerpo.</p>
+                <a href="#" class="btn btn--role btn--sm">Reservar clase</a>
+            </div>
+        </div>
+
+        <!-- Perfil rápido -->
+        <h2 class="db-section-title">👤 Mi perfil rápido</h2>
+        <div class="db-profile-card">
+            <dl>
+                <div class="db-profile-row">
+                    <dt>Nombre</dt>
+                    <dd>Javier Ahumada Pérez</dd>
+                </div>
+                <div class="db-profile-row">
+                    <dt>Correo</dt>
+                    <dd>javier.ahumada@sportclub.cl</dd>
+                </div>
+                <div class="db-profile-row">
+                    <dt>Edad</dt>
+                    <dd>28 años</dd>
+                </div>
+                <div class="db-profile-row">
+                    <dt>Deporte favorito</dt>
+                    <dd>Functional Training</dd>
+                </div>
+                <div class="db-profile-row">
+                    <dt>Plan activo</dt>
+                    <dd><span class="badge badge--yellow">Premium</span></dd>
+                </div>
+            </dl>
+        </div>
+
+    </main>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Administrador | SportClub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,600;0,700;0,800;0,900;1,700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="dashboard-body" data-role="admin">
+
+<!-- ═══ HEADER ═══ -->
+<header class="db-header">
+    <div class="container db-header__inner">
+        <a href="../index.html" class="db-logo db-logo--img">
+            <img src="../assets/img/logo.png" alt="SportClub" class="db__logo-img">
+        </a>
+        <div class="db-header__actions">
+            <a href="#" class="db-action-btn">👤 Mi Perfil</a>
+            <a href="../index.html" class="db-action-btn db-action-btn--logout">→ Cerrar Sesión</a>
+        </div>
+    </div>
+</header>
+
+<div class="db-layout">
+
+    <!-- ═══ SIDEBAR ═══ -->
+    <aside class="db-sidebar">
+        <div class="db-nav-section">
+            <span class="db-nav-label">Principal</span>
+            <nav>
+                <ul>
+                    <li>
+                        <a href="#" class="db-nav-link active">
+                            <span class="db-nav-icon">👑</span> Inicio
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="db-nav-link">
+                            <span class="db-nav-icon">👥</span> Usuarios
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="db-nav-link">
+                            <span class="db-nav-icon">📊</span> Reportes
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="db-nav-link">
+                            <span class="db-nav-icon">⚙️</span> Configuración
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="db-nav-link">
+                            <span class="db-nav-icon">🏋️</span> Clases
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div class="db-nav-section">
+            <span class="db-nav-label">Sistema</span>
+            <nav>
+                <ul>
+                    <li>
+                        <a href="#" class="db-nav-link">
+                            <span class="db-nav-icon">🔔</span> Notificaciones
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="db-nav-link">
+                            <span class="db-nav-icon">🛡️</span> Seguridad
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="db-nav-link">
+                            <span class="db-nav-icon">📞</span> Soporte
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </aside>
+
+    <!-- ═══ CONTENIDO PRINCIPAL ═══ -->
+    <main class="db-main">
+
+        <div class="db-page-header">
+            <div>
+                <h1 class="db-page-title">👑 Panel de Administración</h1>
+                <p class="db-page-sub">Control general del sistema SportClub — Vista completa de métricas y gestión</p>
+            </div>
+            <a href="#" class="btn btn--role btn--sm">➕ Crear usuario</a>
+        </div>
+
+        <!-- Cards estadísticas (total usuarios, coaches, clases) -->
+        <div class="db-stats-grid">
+            <div class="db-stat-card">
+                <span class="db-stat-label">Total usuarios</span>
+                <span class="db-stat-num">128</span>
+                <span class="db-stat-sub">↑ 12 nuevos este mes</span>
+            </div>
+            <div class="db-stat-card">
+                <span class="db-stat-label">Total coaches</span>
+                <span class="db-stat-num">8</span>
+                <span class="db-stat-sub">Todos activos</span>
+            </div>
+            <div class="db-stat-card">
+                <span class="db-stat-label">Total clases</span>
+                <span class="db-stat-num">24</span>
+                <span class="db-stat-sub">5 disciplinas</span>
+            </div>
+            <div class="db-stat-card">
+                <span class="db-stat-label">Ingresos del mes</span>
+                <span class="db-stat-num">$3.2M</span>
+                <span class="db-stat-sub">↑ 8% vs mes anterior</span>
+            </div>
+        </div>
+
+        <!-- Tabla de usuarios (mínimo 5 registros: RUT, nombre, rol, estado, fecha registro) -->
+        <h2 class="db-section-title">📋 Tabla de usuarios</h2>
+        <div class="db-table-wrap">
+            <table class="db-table">
+                <thead>
+                    <tr>
+                        <th>RUT</th>
+                        <th>Nombre completo</th>
+                        <th>Rol</th>
+                        <th>Estado</th>
+                        <th>Fecha de registro</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>12.345.678-9</td>
+                        <td>Javier Ahumada Pérez</td>
+                        <td>Usuario</td>
+                        <td><span class="badge badge--green">Activo</span></td>
+                        <td>15/03/2025</td>
+                    </tr>
+                    <tr>
+                        <td>98.765.432-1</td>
+                        <td>Ana López Soto</td>
+                        <td>Coach</td>
+                        <td><span class="badge badge--green">Activo</span></td>
+                        <td>10/01/2025</td>
+                    </tr>
+                    <tr>
+                        <td>11.111.111-1</td>
+                        <td>Carlos Soto Ramírez</td>
+                        <td>Administrador</td>
+                        <td><span class="badge badge--green">Activo</span></td>
+                        <td>01/12/2024</td>
+                    </tr>
+                    <tr>
+                        <td>22.222.222-2</td>
+                        <td>María Paz Fuentes</td>
+                        <td>Usuario</td>
+                        <td><span class="badge badge--red">Inactivo</span></td>
+                        <td>20/02/2025</td>
+                    </tr>
+                    <tr>
+                        <td>33.333.333-3</td>
+                        <td>Pedro Díaz Morales</td>
+                        <td>Coach</td>
+                        <td><span class="badge badge--green">Activo</span></td>
+                        <td>05/03/2025</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Panel de reportes: clases más solicitadas, usuarios activos, reservas del día -->
+        <h2 class="db-section-title">📊 Panel de reportes</h2>
+        <div class="db-cards-grid">
+            <div class="db-card">
+                <span class="db-card__icon">🔥</span>
+                <h3 class="db-card__title">Clase más solicitada</h3>
+                <p class="db-card__desc">Funcional HIIT lidera el mes con gran diferencia.</p>
+                <span class="badge badge--yellow">150 reservas este mes</span>
+            </div>
+            <div class="db-card">
+                <span class="db-card__icon">✅</span>
+                <h3 class="db-card__title">Usuarios activos</h3>
+                <p class="db-card__desc">112 de 128 socios registrados con actividad reciente.</p>
+                <span class="badge badge--green">87% de retención</span>
+            </div>
+            <div class="db-card">
+                <span class="db-card__icon">📅</span>
+                <h3 class="db-card__title">Reservas de hoy</h3>
+                <p class="db-card__desc">Actividad normal para un día martes del mes.</p>
+                <span class="badge badge--blue">34 reservas hoy</span>
+            </div>
+        </div>
+
+        <!-- Configuración rápida: crear usuario, editar sistema, configuración -->
+        <h2 class="db-section-title">⚙️ Configuración rápida</h2>
+        <div class="db-actions">
+            <a href="#" class="btn btn--role btn--sm">➕ Crear usuario</a>
+            <a href="#" class="btn btn--ghost btn--sm">✏️ Editar sistema</a>
+            <a href="#" class="btn btn--ghost btn--sm">🔧 Configuración</a>
+            <a href="#" class="btn btn--ghost btn--sm">📤 Exportar datos</a>
+        </div>
+
+    </main>
+</div>
+
+</body>
+</html>

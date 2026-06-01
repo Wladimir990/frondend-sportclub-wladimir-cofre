@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recuperar Contraseña | SportClub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,600;0,700;0,800;0,900;1,700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<div class="auth-page">
+    <a href="login.html" class="auth-back">← Volver al login</a>
+
+    <div class="auth-card">
+        <div class="auth-logo-area">
+            <img src="../assets/img/logo.png" alt="SportClub" class="auth__logo-img">
+            <h1 class="auth-title">Recuperar contraseña</h1>
+            <p class="auth-sub">Te enviaremos un enlace para restablecerla</p>
+        </div>
+
+        <form class="auth-form" action="login.html" method="GET">
+
+            <div class="form-group">
+                <label for="email">Correo electrónico registrado</label>
+                <input type="email" id="email" name="email"
+                       placeholder="ejemplo@sportclub.cl" required>
+            </div>
+
+            <!-- Mensaje de confirmación integrado en la interfaz (sin alert()) -->
+            <div class="form-msg form-msg--info">
+                📧 Se ha enviado un enlace de recuperación al correo ingresado.
+                Por favor revisa también tu carpeta de spam.
+            </div>
+
+            <button type="submit" class="btn btn--gold form-submit">
+                Enviar enlace de recuperación
+            </button>
+        </form>
+
+        <p class="auth-footer-text">
+            <a href="login.html">← Volver al inicio de sesión</a>
+        </p>
+    </div>
+</div>
+
+</body>
+</html>

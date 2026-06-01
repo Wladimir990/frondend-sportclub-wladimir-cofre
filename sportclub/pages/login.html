@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión | SportClub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,600;0,700;0,800;0,900;1,700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<div class="auth-page">
+    <a href="../index.html" class="auth-back">← Volver al inicio</a>
+
+    <div class="auth-card">
+        <div class="auth-logo-area">
+            <img src="../assets/img/logo.png" alt="SportClub" class="auth__logo-img">
+            <h1 class="auth-title">¡Bienvenido de vuelta!</h1>
+            <p class="auth-sub">Tu mejor versión comienza hoy</p>
+        </div>
+
+        <form class="auth-form" action="dashboard-usuario.html" method="GET">
+
+            <div class="form-group">
+                <label for="email">Correo electrónico</label>
+                <input type="email" id="email" name="email"
+                       placeholder="ejemplo@sportclub.cl" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Contraseña</label>
+                <input type="password" id="password" name="password"
+                       placeholder="Ingresa tu contraseña" required>
+            </div>
+
+            <div class="form-row">
+                <span></span>
+                <a href="recuperacion.html" class="form-link">¿Olvidaste tu contraseña?</a>
+            </div>
+
+            <!-- Mensajes de feedback (estructura preparada para JS futuro) -->
+            <div class="form-msg form-msg--error" style="display:none;">
+                ❌ Correo o contraseña incorrectos. Inténtalo nuevamente.
+            </div>
+            <div class="form-msg form-msg--success" style="display:none;">
+                ✅ Acceso correcto. Redirigiendo...
+            </div>
+
+            <button type="submit" class="btn btn--gold form-submit">
+                Ingresar al sistema →
+            </button>
+        </form>
+
+        <div class="auth-divider"><span>o accede directamente como</span></div>
+
+        <!-- ACCESOS RÁPIDOS PARA REVISIÓN DEL DOCENTE -->
+        <div class="review-section">
+            <span class="review-label">⚙️ Accesos directos de revisión docente</span>
+            <div class="review-links">
+                <a href="dashboard-usuario.html" class="review-link review-link--user">
+                    📱 Dashboard Usuario
+                    <small>Vista Azul</small>
+                </a>
+                <a href="dashboard-coach.html" class="review-link review-link--coach">
+                    🏋️ Dashboard Coach
+                    <small>Vista Verde</small>
+                </a>
+                <a href="dashboard-admin.html" class="review-link review-link--admin">
+                    👑 Dashboard Administrador
+                    <small>Vista Roja</small>
+                </a>
+            </div>
+        </div>
+
+        <p class="auth-footer-text">
+            ¿No tienes cuenta? <a href="registro.html">Regístrate gratis</a>
+        </p>
+    </div>
+</div>
+
+</body>
+</html>

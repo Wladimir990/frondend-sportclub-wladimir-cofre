@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Coach | SportClub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,600;0,700;0,800;0,900;1,700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="dashboard-body" data-role="coach">
+
+<!-- ═══ HEADER ═══ -->
+<header class="db-header">
+    <div class="container db-header__inner">
+        <a href="../index.html" class="db-logo db-logo--img">
+            <img src="../assets/img/logo.png" alt="SportClub" class="db__logo-img">
+        </a>
+        <div class="db-header__actions">
+            <a href="#" class="db-action-btn">👤 Mi Perfil</a>
+            <a href="../index.html" class="db-action-btn db-action-btn--logout">→ Cerrar Sesión</a>
+        </div>
+    </div>
+</header>
+
+<div class="db-layout">
+
+    <!-- ═══ SIDEBAR ═══ -->
+    <aside class="db-sidebar">
+        <div class="db-nav-section">
+            <span class="db-nav-label">Principal</span>
+            <nav>
+                <ul>
+                    <li>
+                        <a href="#" class="db-nav-link active">
+                            <span class="db-nav-icon">🏠</span> Inicio
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="db-nav-link">
+                            <span class="db-nav-icon">👥</span> Alumnos
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="db-nav-link">
+                            <span class="db-nav-icon">🏋️</span> Clases
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="db-nav-link">
+                            <span class="db-nav-icon">📅</span> Horarios
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div class="db-nav-section">
+            <span class="db-nav-label">Herramientas</span>
+            <nav>
+                <ul>
+                    <li>
+                        <a href="#" class="db-nav-link">
+                            <span class="db-nav-icon">📊</span> Estadísticas
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="db-nav-link">
+                            <span class="db-nav-icon">📞</span> Contacto
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </aside>
+
+    <!-- ═══ CONTENIDO PRINCIPAL ═══ -->
+    <main class="db-main">
+
+        <div class="db-page-header">
+            <div>
+                <h1 class="db-page-title">🏋️ Panel del Coach</h1>
+                <p class="db-page-sub">Gestión de alumnos, clases y horarios semanales</p>
+            </div>
+            <a href="#" class="btn btn--role btn--sm">+ Agregar alumno</a>
+        </div>
+
+        <!-- Panel resumen: total alumnos, clases activas, horas semanales -->
+        <div class="db-stats-grid">
+            <div class="db-stat-card">
+                <span class="db-stat-label">Total alumnos</span>
+                <span class="db-stat-num">28</span>
+                <span class="db-stat-sub">↑ 4 nuevos este mes</span>
+            </div>
+            <div class="db-stat-card">
+                <span class="db-stat-label">Clases activas</span>
+                <span class="db-stat-num">12</span>
+                <span class="db-stat-sub">5 disciplinas distintas</span>
+            </div>
+            <div class="db-stat-card">
+                <span class="db-stat-label">Horas semanales</span>
+                <span class="db-stat-num">18</span>
+                <span class="db-stat-sub">Carga horaria actual</span>
+            </div>
+            <div class="db-stat-card">
+                <span class="db-stat-label">Asistencia promedio</span>
+                <span class="db-stat-num">91%</span>
+                <span class="db-stat-sub">Tasa de presencia</span>
+            </div>
+        </div>
+
+        <!-- Lista de alumnos (mínimo 5) -->
+        <h2 class="db-section-title">👥 Mis alumnos</h2>
+        <div class="db-table-wrap">
+            <table class="db-table">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Correo electrónico</th>
+                        <th>Clase asignada</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Carlos López</td>
+                        <td>carlos.lopez@email.com</td>
+                        <td>Funcional HIIT</td>
+                        <td><span class="badge badge--green">Activo</span></td>
+                    </tr>
+                    <tr>
+                        <td>María García</td>
+                        <td>maria.garcia@email.com</td>
+                        <td>Spinning</td>
+                        <td><span class="badge badge--green">Activo</span></td>
+                    </tr>
+                    <tr>
+                        <td>Pedro Soto</td>
+                        <td>pedro.soto@email.com</td>
+                        <td>Crossfit</td>
+                        <td><span class="badge badge--green">Activo</span></td>
+                    </tr>
+                    <tr>
+                        <td>Ana Rojas</td>
+                        <td>ana.rojas@email.com</td>
+                        <td>Yoga &amp; Meditación</td>
+                        <td><span class="badge badge--green">Activo</span></td>
+                    </tr>
+                    <tr>
+                        <td>Javier Ahumada</td>
+                        <td>javier@sportclub.cl</td>
+                        <td>Boxeo Técnico</td>
+                        <td><span class="badge badge--red">Inactivo</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Clases asignadas (mínimo 3 cards: nombre, día, hora) -->
+        <h2 class="db-section-title">🏋️ Clases asignadas</h2>
+        <div class="db-cards-grid">
+            <div class="db-card">
+                <span class="db-card__icon">⚡</span>
+                <h3 class="db-card__title">Funcional HIIT</h3>
+                <p class="db-card__desc">📅 Lunes · 19:00 – 20:00</p>
+                <p class="db-card__desc">👥 12 alumnos inscritos</p>
+                <span class="badge badge--green" style="margin-top:8px;">Activa</span>
+            </div>
+            <div class="db-card">
+                <span class="db-card__icon">🚴</span>
+                <h3 class="db-card__title">Spinning</h3>
+                <p class="db-card__desc">📅 Martes · 19:30 – 20:30</p>
+                <p class="db-card__desc">👥 8 alumnos inscritos</p>
+                <span class="badge badge--green" style="margin-top:8px;">Activa</span>
+            </div>
+            <div class="db-card">
+                <span class="db-card__icon">🥊</span>
+                <h3 class="db-card__title">Boxeo Técnico</h3>
+                <p class="db-card__desc">📅 Jueves · 20:00 – 21:00</p>
+                <p class="db-card__desc">👥 9 alumnos inscritos</p>
+                <span class="badge badge--green" style="margin-top:8px;">Activa</span>
+            </div>
+        </div>
+
+        <!-- Horario semanal (mínimo 5 datos: clase, día, hora, cantidad alumnos) -->
+        <h2 class="db-section-title">📅 Horario semanal completo</h2>
+        <div class="db-table-wrap">
+            <table class="db-table">
+                <thead>
+                    <tr>
+                        <th>Clase</th>
+                        <th>Día</th>
+                        <th>Hora inicio</th>
+                        <th>Hora fin</th>
+                        <th>Cantidad alumnos</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Funcional HIIT</td>
+                        <td>Lunes</td>
+                        <td>19:00</td>
+                        <td>20:00</td>
+                        <td>12</td>
+                        <td><span class="badge badge--green">Activa</span></td>
+                    </tr>
+                    <tr>
+                        <td>Spinning</td>
+                        <td>Martes</td>
+                        <td>19:30</td>
+                        <td>20:30</td>
+                        <td>8</td>
+                        <td><span class="badge badge--green">Activa</span></td>
+                    </tr>
+                    <tr>
+                        <td>Crossfit</td>
+                        <td>Miércoles</td>
+                        <td>18:00</td>
+                        <td>19:30</td>
+                        <td>15</td>
+                        <td><span class="badge badge--green">Activa</span></td>
+                    </tr>
+                    <tr>
+                        <td>Boxeo Técnico</td>
+                        <td>Jueves</td>
+                        <td>20:00</td>
+                        <td>21:00</td>
+                        <td>9</td>
+                        <td><span class="badge badge--green">Activa</span></td>
+                    </tr>
+                    <tr>
+                        <td>Yoga &amp; Meditación</td>
+                        <td>Viernes</td>
+                        <td>20:00</td>
+                        <td>21:00</td>
+                        <td>10</td>
+                        <td><span class="badge badge--green">Activa</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Acciones rápidas -->
+        <h2 class="db-section-title">⚡ Acciones rápidas</h2>
+        <div class="db-actions">
+            <a href="#" class="btn btn--role btn--sm">➕ Agregar alumno</a>
+            <a href="#" class="btn btn--ghost btn--sm">📋 Ver reportes</a>
+            <a href="#" class="btn btn--ghost btn--sm">📅 Editar horario</a>
+        </div>
+
+    </main>
+</div>
+
+</body>
+</html>
