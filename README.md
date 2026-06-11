@@ -5,7 +5,7 @@
 | Campo | Detalle |
 |-------|---------|
 | **Institución** | INACAP |
-| **Asignatura** | Programación Front End (TI3V31) |
+| **Asignatura** | Programación Front End (T13V31) |
 | **Docente** | Javier Ahumada |
 | **Estudiante** | Saud Wladimir Cofré Encina |
 | **Año** | 2026 |

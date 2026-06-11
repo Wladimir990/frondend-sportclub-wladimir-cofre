@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Perfil | SportClub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        body { background:#09071A;color:#fff;font-family:'DM Sans',sans-serif;margin:0; }
+        .db-header { position:fixed;top:0;left:0;width:100%;height:66px;
+            background:rgba(9,7,26,0.97);border-bottom:3px solid #F2B705;
+            display:flex;align-items:center;z-index:200;backdrop-filter:blur(20px); }
+        .db-header .container { display:flex;justify-content:space-between;align-items:center;
+            width:min(100% - 40px,1200px);margin:0 auto; }
+        .db-logo { font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:900;
+            color:#F2B705;display:flex;align-items:center;gap:10px;text-decoration:none; }
+        .btn-logout { background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);
+            color:#ef4444;padding:7px 16px;border-radius:50px;cursor:pointer;
+            font-size:0.82rem;font-weight:700;text-decoration:none;transition:all .2s; }
+        .db-layout { display:flex;padding-top:66px;min-height:100vh; }
+        .db-sidebar { width:240px;background:rgba(12,10,22,0.98);border-right:1px solid rgba(255,255,255,0.07);
+            position:fixed;top:66px;bottom:0;padding:24px 12px;overflow-y:auto; }
+        .db-nav a { display:flex;align-items:center;gap:10px;padding:11px 14px;border-radius:10px;
+            color:#7a7491;font-size:0.88rem;font-weight:500;text-decoration:none;
+            transition:all .2s;margin-bottom:3px; }
+        .db-nav a:hover { background:rgba(255,255,255,0.05);color:#fff; }
+        .db-nav a.active { background:rgba(242,183,5,0.1);color:#F2B705;font-weight:700; }
+        .nav-label { font-size:0.62rem;font-weight:700;letter-spacing:2px;
+            text-transform:uppercase;color:rgba(122,116,145,0.5);padding:6px 14px;
+            display:block;margin-bottom:4px; }
+        .db-main { flex:1;margin-left:240px;padding:36px 44px 60px; }
+
+        .page-header { margin-bottom:28px;padding-bottom:24px;
+            border-bottom:1px solid rgba(255,255,255,0.07); }
+        .page-header h1 { font-family:'Barlow Condensed',sans-serif;font-size:2rem;
+            font-weight:900;margin-bottom:4px; }
+        .page-header p { color:#7a7491;font-size:0.9rem; }
+
+        /* Grid perfil */
+        .perfil-grid { display:grid;grid-template-columns:300px 1fr;gap:24px;align-items:start; }
+
+        /* Card izquierda */
+        .card-perfil-info { background:#16142E;border:1px solid rgba(255,255,255,0.07);
+            border-radius:16px;padding:28px;text-align:center; }
+        .avatar { width:80px;height:80px;border-radius:50%;background:#2E1A47;
+            display:flex;align-items:center;justify-content:center;
+            font-family:'Barlow Condensed',sans-serif;font-size:2.2rem;font-weight:900;
+            color:#F2B705;margin:0 auto 16px;border:3px solid rgba(242,183,5,0.3); }
+        .card-perfil-info h3 { font-family:'Barlow Condensed',sans-serif;font-size:1.4rem;
+            font-weight:800;margin-bottom:4px; }
+        .card-perfil-info .sub { color:#7a7491;font-size:0.85rem;margin-bottom:16px; }
+        .info-item { display:flex;align-items:center;gap:10px;padding:10px 0;
+            border-bottom:1px solid rgba(255,255,255,0.05);font-size:0.85rem;
+            text-align:left; }
+        .info-item:last-child { border-bottom:none; }
+        .info-item .icon { font-size:1rem;width:22px;flex-shrink:0; }
+        .info-item .label { color:#7a7491;font-size:0.72rem;display:block; }
+        .info-item .value { color:#fff;font-weight:500; }
+
+        /* Cards derecha */
+        .card-seccion { background:#16142E;border:1px solid rgba(255,255,255,0.07);
+            border-radius:16px;padding:28px;margin-bottom:20px; }
+        .card-seccion h3 { font-family:'Barlow Condensed',sans-serif;font-size:1.2rem;
+            font-weight:800;margin-bottom:20px;display:flex;align-items:center;gap:8px; }
+        .form-group { margin-bottom:16px; }
+        .form-group label { display:block;font-size:0.72rem;font-weight:700;
+            letter-spacing:1.5px;text-transform:uppercase;color:#7a7491;margin-bottom:6px; }
+        .form-group input { width:100%;padding:12px 16px;
+            background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);
+            border-radius:10px;color:#fff;font-family:'DM Sans',sans-serif;
+            font-size:0.95rem;box-sizing:border-box;transition:all .2s; }
+        .form-group input:focus { outline:none;border-color:rgba(242,183,5,0.5);
+            box-shadow:0 0 0 3px rgba(242,183,5,0.08); }
+        .form-group input:disabled { opacity:0.45;cursor:not-allowed; }
+        .form-group textarea { width:100%;padding:12px 16px;
+            background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);
+            border-radius:10px;color:#fff;font-family:'DM Sans',sans-serif;
+            font-size:0.9rem;box-sizing:border-box;resize:vertical;min-height:80px; }
+        .campo-error { font-size:0.78rem;color:#f87171;margin-top:4px;display:none; }
+        .form-row { display:grid;grid-template-columns:1fr 1fr;gap:16px; }
+
+        .btn-guardar { background:#F2B705;color:#000;border:none;padding:12px 28px;
+            border-radius:50px;cursor:pointer;font-family:'Barlow Condensed',sans-serif;
+            font-weight:800;font-size:0.9rem;letter-spacing:1px;text-transform:uppercase;
+            transition:all .2s; }
+        .btn-guardar:hover { background:#F7CA3A;transform:translateY(-2px); }
+        .btn-pass { background:#3b82f6;color:#fff;border:none;padding:12px 28px;
+            border-radius:50px;cursor:pointer;font-family:'Barlow Condensed',sans-serif;
+            font-weight:800;font-size:0.9rem;letter-spacing:1px;text-transform:uppercase;
+            transition:all .2s; }
+        .btn-pass:hover { background:#2563eb;transform:translateY(-2px); }
+        .nota-campo { font-size:0.78rem;color:#7a7491;margin-top:4px; }
+
+        .msg-ok { background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.25);
+            color:#34d399;padding:12px 18px;border-radius:10px;font-size:0.85rem;
+            font-weight:600;display:none;margin-top:12px;align-items:center;gap:8px; }
+
+        @media(max-width:1024px) { .perfil-grid { grid-template-columns:1fr; } }
+        @media(max-width:768px) {
+            .db-sidebar { display:none; }
+            .db-main { margin-left:0;padding:20px 16px; }
+            .form-row { grid-template-columns:1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="db-header">
+    <div class="container">
+        <a href="../index.html" class="db-logo">🏋️ SportClub</a>
+        <div style="display:flex;align-items:center;gap:12px;">
+            <span style="color:#aaa;font-size:0.88rem;">👤 Mi cuenta</span>
+            <a href="login.html" class="btn-logout" id="btn-logout">→ Cerrar sesión</a>
+        </div>
+    </div>
+</header>
+
+<div class="db-layout">
+    <aside class="db-sidebar">
+        <span class="nav-label">Mi cuenta</span>
+        <nav class="db-nav">
+            <a href="#" onclick="history.back()">← Volver</a>
+            <a href="perfil.html" class="active">👤 Mi Perfil</a>
+        </nav>
+    </aside>
+
+    <main class="db-main">
+        <div class="page-header">
+            <h1>👤 Mi Perfil</h1>
+            <p>Gestiona tu información personal y preferencias de cuenta</p>
+        </div>
+
+        <div class="perfil-grid">
+
+            <!-- Card izquierda: info visual -->
+            <div class="card-perfil-info">
+                <div class="avatar" id="perfil-avatar">?</div>
+                <h3 id="perfil-nombre">Cargando...</h3>
+                <p class="sub">Usuario del sistema</p>
+                <div id="perfil-rol"></div>
+                <br>
+                <div class="info-item">
+                    <span class="icon">📧</span>
+                    <div>
+                        <span class="label">Email</span>
+                        <span class="value" id="perfil-email">—</span>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <span class="icon">🎂</span>
+                    <div>
+                        <span class="label">Fecha de nacimiento</span>
+                        <span class="value" id="perfil-fecha">—</span>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <span class="icon">📅</span>
+                    <div>
+                        <span class="label">Fecha de registro</span>
+                        <span class="value" id="perfil-registro">—</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cards derecha -->
+            <div>
+
+                <!-- Datos personales -->
+                <div class="card-seccion">
+                    <h3>📋 Información Personal</h3>
+                    <form id="form-editar-perfil" novalidate>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Nombre completo</label>
+                                <input type="text" id="edit-nombre" placeholder="Tu nombre completo">
+                                <span class="campo-error" id="err-edit-nombre"></span>
+                            </div>
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="email" id="edit-email" placeholder="tu@email.com">
+                                <span class="nota-campo">El email no puede modificarse.</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Fecha de nacimiento</label>
+                            <input type="date" id="edit-fecha">
+                        </div>
+                        <div class="form-group">
+                            <label>Otros / Metadata <span style="color:#7a7491;font-weight:400;text-transform:none;">(intereses, habilidades, etc.)</span></label>
+                            <textarea id="edit-metadata" placeholder="Ej: Me interesa el fútbol y la nutrición..."></textarea>
+                        </div>
+                        <span class="campo-error" id="err-edit-general"
+                              style="font-size:0.85rem;"></span>
+                        <div class="msg-ok" id="msg-perfil-ok"></div>
+                        <button type="submit" class="btn-guardar" id="btn-guardar-perfil">
+                            ✅ Guardar cambios
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Cambiar contraseña -->
+                <div class="card-seccion">
+                    <h3>🔒 Cambiar Contraseña</h3>
+                    <form id="form-password" novalidate>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Contraseña actual</label>
+                                <input type="password" id="pass-actual"
+                                       placeholder="Ingresa tu contraseña actual">
+                                <span class="campo-error" id="err-pass-actual"></span>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Nueva contraseña</label>
+                                <input type="password" id="pass-nueva"
+                                       placeholder="Mínimo 8 caracteres">
+                                <span class="campo-error" id="err-pass-nueva"></span>
+                            </div>
+                            <div class="form-group">
+                                <label>Confirmar nueva contraseña</label>
+                                <input type="password" id="pass-confirmar"
+                                       placeholder="Repite la nueva contraseña">
+                                <span class="campo-error" id="err-pass-confirm"></span>
+                            </div>
+                        </div>
+                        <p style="font-size:0.78rem;color:#7a7491;margin-bottom:14px;">
+                            ℹ️ La contraseña debe tener al menos 8 caracteres, incluir letras y números.
+                        </p>
+                        <span class="campo-error" id="err-pass-general"
+                              style="font-size:0.85rem;"></span>
+                        <div class="msg-ok" id="msg-pass-ok"></div>
+                        <button type="submit" class="btn-pass" id="btn-cambiar-pass">
+                            🔒 Actualizar contraseña
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </main>
+</div>
+
+<script src="../js/perfil.js"></script>
+</body>
+</html>

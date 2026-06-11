@@ -8,63 +8,130 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,600;0,700;0,800;0,900;1,700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/style.css">
+    <style>
+        /* Contenedor input + botón ojo */
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        .input-wrapper input {
+            width: 100%;
+            padding-right: 44px; /* espacio para el botón ojo */
+        }
+        .btn-toggle-pass {
+            position: absolute;
+            right: 12px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            padding: 4px;
+            line-height: 1;
+        }
+        /* Indicador de fuerza de contraseña */
+        .pass-indicador {
+            font-size: 0.78rem;
+            margin-top: 4px;
+            min-height: 16px;
+            font-weight: 600;
+        }
+        /* Error por campo */
+        .form-field-error {
+            display: block;
+            font-size: 0.78rem;
+            color: #f87171;
+            margin-top: 4px;
+        }
+    </style>
 </head>
 <body>
 
 <div class="auth-page">
     <a href="login.html" class="auth-back">← Volver al login</a>
 
-    <div class="auth-card" style="max-width: 500px;">
+    <div class="auth-card" style="max-width:500px;">
         <div class="auth-logo-area">
             <img src="../assets/img/logo.png" alt="SportClub" class="auth__logo-img">
             <h1 class="auth-title">Crear cuenta</h1>
             <p class="auth-sub">Comienza tu transformación hoy mismo</p>
         </div>
 
-        <form class="auth-form" action="login.html" method="GET">
+        <form class="auth-form" id="form-registro" novalidate>
 
+            <!-- Nombre completo -->
             <div class="form-group">
                 <label for="nombre">Nombre completo</label>
                 <input type="text" id="nombre" name="nombre"
-                       placeholder="Ej: Javier Ahumada Pérez" required>
+                       placeholder="Ej: Javier Ahumada Pérez">
+                <span class="form-field-error" id="err-nombre"
+                      style="display:none;"></span>
             </div>
 
+            <!-- Email -->
             <div class="form-group">
                 <label for="email">Correo electrónico</label>
                 <input type="email" id="email" name="email"
-                       placeholder="ejemplo@sportclub.cl" required>
+                       placeholder="ejemplo@sportclub.cl">
+                <span class="form-field-error" id="err-email"
+                      style="display:none;"></span>
             </div>
 
+            <!-- Fecha de nacimiento (opcional) -->
             <div class="form-group">
-                <label for="telefono">Teléfono <span style="color:var(--text-muted); font-weight:400; text-transform:none; letter-spacing:0;">(opcional)</span></label>
-                <input type="tel" id="telefono" name="telefono"
-                       placeholder="+56 9 1234 5678">
+                <label for="fecha_nacimiento">
+                    Fecha de nacimiento
+                    <span style="color:var(--text-muted);font-weight:400;
+                                 text-transform:none;letter-spacing:0;">
+                        (opcional)
+                    </span>
+                </label>
+                <input type="date" id="fecha_nacimiento" name="fecha_nacimiento">
             </div>
 
+            <!-- Contraseña con botón ojo + indicador de fuerza -->
             <div class="form-group">
                 <label for="password">Contraseña</label>
-                <input type="password" id="password" name="password"
-                       placeholder="Mínimo 6 caracteres" required>
+                <div class="input-wrapper">
+                    <input type="password" id="password" name="password"
+                           placeholder="Mínimo 8 caracteres, letras y números">
+                    <button type="button" class="btn-toggle-pass"
+                            id="toggle-password" title="Mostrar/ocultar">
+                        👁️
+                    </button>
+                </div>
+                <span class="pass-indicador" id="pass-indicador"></span>
+                <span class="form-field-error" id="err-password"
+                      style="display:none;"></span>
             </div>
 
+            <!-- Confirmar contraseña con botón ojo -->
             <div class="form-group">
                 <label for="confirm_password">Confirmar contraseña</label>
-                <input type="password" id="confirm_password" name="confirm_password"
-                       placeholder="Repite tu contraseña" required>
+                <div class="input-wrapper">
+                    <input type="password" id="confirm_password"
+                           name="confirm_password"
+                           placeholder="Repite tu contraseña">
+                    <button type="button" class="btn-toggle-pass"
+                            id="toggle-confirm-password" title="Mostrar/ocultar">
+                        👁️
+                    </button>
+                </div>
+                <span class="form-field-error" id="err-confirm"
+                      style="display:none;"></span>
             </div>
 
-            <!-- Mensajes de feedback visual (preparados para validaciones futuras) -->
-            <div class="form-msg form-msg--error" id="msg-no-match" style="display: none;">
-                ❌ Las contraseñas no coinciden. Inténtalo nuevamente.
-            </div>
-            <div class="form-msg form-msg--error" id="msg-email-inv" style="display: none;">
-                ❌ El formato del correo electrónico no es válido.
-            </div>
-            <div class="form-msg form-msg--success" id="msg-ok" style="display: none;">
-                ✅ ¡Usuario registrado correctamente! Redirigiendo al login...
-            </div>
+            <!-- Mensajes generales -->
+            <div class="form-msg form-msg--error"
+                 id="msg-registro-error"
+                 style="display:none;"></div>
+            <div class="form-msg form-msg--success"
+                 id="msg-registro-success"
+                 style="display:none;"></div>
 
-            <button type="submit" class="btn btn--gold form-submit">
+            <button type="submit"
+                    class="btn btn--gold form-submit btn-submit-registro">
                 Crear mi cuenta →
             </button>
         </form>
@@ -74,6 +141,8 @@
         </p>
     </div>
 </div>
+
+<script src="../js/registro.js"></script>
 
 </body>
 </html>

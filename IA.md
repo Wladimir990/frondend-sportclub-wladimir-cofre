@@ -5,7 +5,7 @@
 | Campo | Detalle |
 |-------|---------|
 | **Institución** | INACAP |
-| **Asignatura** | Programación Front End (Código TI3V31) |
+| **Asignatura** | Programación Front End (Código T13V31) |
 | **Evaluación** | Evaluación Sumativa 1: Desarrollo de sitio web estático con HTML5 y CSS3 |
 | **Docente** | Javier Ahumada |
 | **Estudiante** | Saud Wladimir Cofré Encina |
