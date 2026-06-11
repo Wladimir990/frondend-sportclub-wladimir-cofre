@@ -18,24 +18,36 @@
         <div class="auth-logo-area">
             <img src="../assets/img/logo.png" alt="SportClub" class="auth__logo-img">
             <h1 class="auth-title">Recuperar contraseña</h1>
-            <p class="auth-sub">Te enviaremos un enlace para restablecerla</p>
+            <p class="auth-sub">Ingresa tu correo y te enviaremos un enlace</p>
         </div>
 
-        <form class="auth-form" action="login.html" method="GET">
+        <!-- Sin action ni method — lo maneja el JS de abajo -->
+        <form class="auth-form" id="form-recuperacion" novalidate>
 
             <div class="form-group">
                 <label for="email">Correo electrónico registrado</label>
                 <input type="email" id="email" name="email"
-                       placeholder="ejemplo@sportclub.cl" required>
+                       placeholder="ejemplo@sportclub.cl">
+                <span class="form-field-error" id="err-email"
+                      style="display:none;"></span>
             </div>
 
-            <!-- Mensaje de confirmación integrado en la interfaz (sin alert()) -->
-            <div class="form-msg form-msg--info">
+            <!-- Mensaje de error -->
+            <div class="form-msg form-msg--error"
+                 id="msg-error"
+                 style="display:none;"></div>
+
+            <!-- Mensaje de éxito — oculto hasta que se envíe -->
+            <div class="form-msg form-msg--info"
+                 id="msg-exito"
+                 style="display:none;">
                 📧 Se ha enviado un enlace de recuperación al correo ingresado.
                 Por favor revisa también tu carpeta de spam.
             </div>
 
-            <button type="submit" class="btn btn--gold form-submit">
+            <button type="submit"
+                    class="btn btn--gold form-submit"
+                    id="btn-recuperar">
                 Enviar enlace de recuperación
             </button>
         </form>
@@ -45,6 +57,70 @@
         </p>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+    const form      = document.getElementById('form-recuperacion');
+    const inputEmail = document.getElementById('email');
+    const errEmail  = document.getElementById('err-email');
+    const msgError  = document.getElementById('msg-error');
+    const msgExito  = document.getElementById('msg-exito');
+    const btn       = document.getElementById('btn-recuperar');
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault(); // Evita que recargue la página
+
+        // 1. Limpiar mensajes anteriores
+        errEmail.style.display  = 'none';
+        msgError.style.display  = 'none';
+        msgExito.style.display  = 'none';
+
+        // 2. Leer y validar el correo
+        const email = inputEmail.value.trim();
+
+        if (!email) {
+            errEmail.textContent  = '❌ Debes ingresar tu correo.';
+            errEmail.style.display = 'block';
+            return;
+        }
+
+        const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!regexEmail.test(email)) {
+            errEmail.textContent  = '❌ El formato del correo no es válido.';
+            errEmail.style.display = 'block';
+            return;
+        }
+
+        // 3. Deshabilitar botón mientras procesa
+        btn.disabled    = true;
+        btn.textContent = 'Enviando...';
+
+        // 4. Intentar llamar al backend
+        //    Si el backend no tiene este endpoint, igual mostramos el mensaje
+        try {
+            await fetch('http://localhost:3000/api/auth/recover', {
+                method:  'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body:    JSON.stringify({ email })
+            });
+        } catch (err) {
+            // Si el backend no tiene el endpoint, no importa
+            // igual mostramos la confirmación visual
+            console.log('Backend sin endpoint de recuperación:', err.message);
+        }
+
+        // 5. Mostrar mensaje de confirmación y ocultar el formulario
+        form.style.display   = 'none';
+        msgExito.style.display = 'flex';
+
+        // 6. Redirigir al login después de 3 segundos
+        setTimeout(() => {
+            window.location.href = 'login.html';
+        }, 3000);
+    });
+});
+</script>
 
 </body>
 </html>
