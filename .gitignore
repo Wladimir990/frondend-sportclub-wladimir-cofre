@@ -1,0 +1,14 @@
+﻿# Backend - ignorar todo esto
+src/
+docker/
+node_modules/
+storage/
+Backend-ClubDeportivo/
+.env
+docker-compose.yml
+Dockerfile
+package.json
+package-lock.json
+pnpm-lock.yaml
+pnpm-workspace.yaml
+prueba.txt
