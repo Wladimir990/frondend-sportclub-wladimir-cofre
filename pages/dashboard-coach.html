@@ -14,12 +14,10 @@
 <!-- ═══ HEADER ═══ -->
 <header class="db-header">
     <div class="container db-header__inner">
-        <a href="../index.html" class="db-logo db-logo--img">
-            <img src="../assets/img/logo.png" alt="SportClub" class="db__logo-img">
-        </a>
+        <a href="../index.html" class="db-logo db-logo--img" style="text-decoration:none;"><img src="../assets/img/logo.png" alt="SportClub" class="db__logo-img" style="height:32px;width:auto;display:block;object-fit:contain;filter:drop-shadow(0 2px 6px rgba(242,183,5,0.2));"></a>
         <div class="db-header__actions">
-            <a href="#" class="db-action-btn">👤 Mi Perfil</a>
-            <a href="../index.html" class="db-action-btn db-action-btn--logout">→ Cerrar Sesión</a>
+            <a href="perfil.html" class="db-action-btn">👤 <span id="nombre-usuario">Mi Perfil</span></a>
+            <a href="#" class="db-action-btn db-action-btn--logout">→ Cerrar Sesión</a>
         </div>
     </div>
 </header>
@@ -252,5 +250,13 @@
     </main>
 </div>
 
+<script src="../js/dashboard.js"></script>
+<script>
+const usuarioActual = protegerRuta('coach');
+document.addEventListener('DOMContentLoaded', () => {
+    if (!usuarioActual) return;
+    cargarNombreUsuario('nombre-usuario');
+});
+</script>
 </body>
 </html>

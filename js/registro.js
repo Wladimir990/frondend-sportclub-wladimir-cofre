@@ -171,10 +171,20 @@ function configurarTogglePass(toggleId, inputId) {
     });
 }
 
-function mostrarError(el, texto) {
+function mostrarError(el, texto, inputId = null) {
     if (!el) return;
     el.textContent   = texto;
     el.style.display = 'block';
+    // Marcar input con borde rojo
+    if (inputId) {
+        const input = document.getElementById(inputId);
+        if (input) input.classList.add('input-error');
+    }
+}
+
+function limpiarErrorInput(inputId) {
+    const input = document.getElementById(inputId);
+    if (input) input.classList.remove('input-error');
 }
 
 function limpiarErrores(elementos) {

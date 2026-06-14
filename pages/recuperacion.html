@@ -21,9 +21,7 @@
             <p class="auth-sub">Ingresa tu correo y te enviaremos un enlace</p>
         </div>
 
-        <!-- Sin action ni method — lo maneja el JS de abajo -->
         <form class="auth-form" id="form-recuperacion" novalidate>
-
             <div class="form-group">
                 <label for="email">Correo electrónico registrado</label>
                 <input type="email" id="email" name="email"
@@ -32,21 +30,16 @@
                       style="display:none;"></span>
             </div>
 
-            <!-- Mensaje de error -->
             <div class="form-msg form-msg--error"
-                 id="msg-error"
-                 style="display:none;"></div>
+                 id="msg-error" style="display:none;"></div>
 
-            <!-- Mensaje de éxito — oculto hasta que se envíe -->
             <div class="form-msg form-msg--info"
-                 id="msg-exito"
-                 style="display:none;">
+                 id="msg-exito" style="display:none;">
                 📧 Se ha enviado un enlace de recuperación al correo ingresado.
-                Por favor revisa también tu carpeta de spam.
+                Revisa también tu carpeta de spam.
             </div>
 
-            <button type="submit"
-                    class="btn btn--gold form-submit"
+            <button type="submit" class="btn btn--gold form-submit"
                     id="btn-recuperar">
                 Enviar enlace de recuperación
             </button>
@@ -60,7 +53,6 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-
     const form      = document.getElementById('form-recuperacion');
     const inputEmail = document.getElementById('email');
     const errEmail  = document.getElementById('err-email');
@@ -69,55 +61,65 @@ document.addEventListener('DOMContentLoaded', () => {
     const btn       = document.getElementById('btn-recuperar');
 
     form.addEventListener('submit', async (e) => {
-        e.preventDefault(); // Evita que recargue la página
+        e.preventDefault();
 
-        // 1. Limpiar mensajes anteriores
-        errEmail.style.display  = 'none';
-        msgError.style.display  = 'none';
-        msgExito.style.display  = 'none';
+        // Limpiar mensajes
+        errEmail.style.display = 'none';
+        msgError.style.display = 'none';
+        msgExito.style.display = 'none';
+        inputEmail.classList.remove('input-error');
 
-        // 2. Leer y validar el correo
         const email = inputEmail.value.trim();
 
+        // Validar email
         if (!email) {
-            errEmail.textContent  = '❌ Debes ingresar tu correo.';
+            errEmail.textContent   = '❌ Debes ingresar tu correo.';
             errEmail.style.display = 'block';
+            inputEmail.classList.add('input-error');
             return;
         }
 
         const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!regexEmail.test(email)) {
-            errEmail.textContent  = '❌ El formato del correo no es válido.';
+            errEmail.textContent   = '❌ El formato del correo no es válido.';
             errEmail.style.display = 'block';
+            inputEmail.classList.add('input-error');
             return;
         }
 
-        // 3. Deshabilitar botón mientras procesa
         btn.disabled    = true;
         btn.textContent = 'Enviando...';
 
-        // 4. Intentar llamar al backend
-        //    Si el backend no tiene este endpoint, igual mostramos el mensaje
         try {
-            await fetch('http://localhost:3000/api/auth/recover', {
+            // Intentar llamar al endpoint si existe
+            const response = await fetch('http://localhost:3000/api/auth/recover', {
                 method:  'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body:    JSON.stringify({ email })
             });
-        } catch (err) {
-            // Si el backend no tiene el endpoint, no importa
-            // igual mostramos la confirmación visual
-            console.log('Backend sin endpoint de recuperación:', err.message);
+            if (response.ok) {
+                const data = await response.json();
+                if (!data.ok) throw new Error(data.message);
+            }
+        } catch (error) {
+            // Si el endpoint no existe, igual mostramos el mensaje visual
+            console.log('Endpoint recover no disponible, mostrando feedback visual.');
         }
 
-        // 5. Mostrar mensaje de confirmación y ocultar el formulario
-        form.style.display   = 'none';
+        // Mostrar éxito y ocultar formulario
+        form.style.display     = 'none';
         msgExito.style.display = 'flex';
 
-        // 6. Redirigir al login después de 3 segundos
+        // Redirigir al login después de 3 segundos
         setTimeout(() => {
             window.location.href = 'login.html';
         }, 3000);
+    });
+
+    // Limpiar error al escribir
+    inputEmail.addEventListener('input', () => {
+        inputEmail.classList.remove('input-error');
+        errEmail.style.display = 'none';
     });
 });
 </script>

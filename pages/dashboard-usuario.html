@@ -14,12 +14,10 @@
 <!-- ═══ HEADER ═══ -->
 <header class="db-header">
     <div class="container db-header__inner">
-        <a href="../index.html" class="db-logo db-logo--img">
-            <img src="../assets/img/logo.png" alt="SportClub" class="db__logo-img">
-        </a>
+        <a href="../index.html" class="db-logo db-logo--img" style="text-decoration:none;"><img src="../assets/img/logo.png" alt="SportClub" class="db__logo-img" style="height:32px;width:auto;display:block;object-fit:contain;filter:drop-shadow(0 2px 6px rgba(242,183,5,0.2));"></a>
         <div class="db-header__actions">
-            <a href="#" class="db-action-btn">👤 Mi Perfil</a>
-            <a href="../index.html" class="db-action-btn db-action-btn--logout">→ Cerrar Sesión</a>
+            <a href="perfil.html" class="db-action-btn">👤 <span id="nombre-usuario">Mi Perfil</span></a>
+            <a href="#" class="db-action-btn db-action-btn--logout">→ Cerrar Sesión</a>
         </div>
     </div>
 </header>
@@ -187,23 +185,19 @@
             <dl>
                 <div class="db-profile-row">
                     <dt>Nombre</dt>
-                    <dd>Javier Ahumada Pérez</dd>
+                    <dd id="perfil-rapido-nombre">—</dd>
                 </div>
                 <div class="db-profile-row">
                     <dt>Correo</dt>
-                    <dd>javier.ahumada@sportclub.cl</dd>
+                    <dd id="perfil-rapido-email">—</dd>
                 </div>
                 <div class="db-profile-row">
-                    <dt>Edad</dt>
-                    <dd>28 años</dd>
+                    <dt>Fecha de nacimiento</dt>
+                    <dd id="perfil-rapido-fecha">—</dd>
                 </div>
                 <div class="db-profile-row">
-                    <dt>Deporte favorito</dt>
-                    <dd>Functional Training</dd>
-                </div>
-                <div class="db-profile-row">
-                    <dt>Plan activo</dt>
-                    <dd><span class="badge badge--yellow">Premium</span></dd>
+                    <dt>Rol</dt>
+                    <dd id="perfil-rapido-rol">—</dd>
                 </div>
             </dl>
         </div>
@@ -211,5 +205,60 @@
     </main>
 </div>
 
+<script src="../js/dashboard.js"></script>
+<script>
+const usuarioActual = protegerRuta('user');
+
+document.addEventListener('DOMContentLoaded', async () => {
+    if (!usuarioActual) return;
+
+    const h1 = document.querySelector('.db-page-title');
+    if (h1) h1.textContent = `💪 ¡Bienvenido, ${usuarioActual.full_name.split(' ')[0]}!`;
+
+    cargarNombreUsuario('nombre-usuario');
+    await cargarPerfilReal();
+});
+
+async function cargarPerfilReal() {
+    try {
+        const response = await fetch('http://localhost:3000/api/auth/me', {
+            headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
+        });
+        const data = await response.json();
+        const u = data.data || data;
+
+        const filas = document.querySelectorAll('.db-profile-row');
+
+        if (filas[0]) filas[0].querySelector('dd').textContent = u.full_name || '—';
+        if (filas[1]) filas[1].querySelector('dd').textContent = u.email || '—';
+
+        if (filas[2] && u.birth_date) {
+            const birth  = new Date(u.birth_date);
+            const edad   = Math.abs(new Date(Date.now() - birth).getUTCFullYear() - 1970);
+            filas[2].querySelector('dd').textContent = edad + ' años';
+        } else if (filas[2]) {
+            filas[2].querySelector('dd').textContent = '—';
+        }
+
+        if (filas[3]) {
+            filas[3].querySelector('dd').textContent =
+                (u.metadata && u.metadata.deporte_favorito) ? u.metadata.deporte_favorito : 'Functional Training';
+        }
+
+        if (filas[4]) {
+            const dd   = filas[4].querySelector('dd');
+            const plan = (u.metadata && u.metadata.plan) ? u.metadata.plan : 'Premium';
+            dd.innerHTML = `<span class="badge badge--yellow">${plan}</span>`;
+        }
+
+    } catch (error) {
+        console.error('Error perfil real:', error);
+        // Fallback con datos del localStorage
+        const filas = document.querySelectorAll('.db-profile-row');
+        if (filas[0]) filas[0].querySelector('dd').textContent = usuarioActual.full_name || '—';
+        if (filas[1]) filas[1].querySelector('dd').textContent = usuarioActual.email || '—';
+    }
+}
+</script>
 </body>
 </html>

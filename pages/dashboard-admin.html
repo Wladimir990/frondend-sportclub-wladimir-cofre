@@ -11,195 +11,137 @@
 </head>
 <body class="dashboard-body" data-role="admin">
 
-<!-- ═══ HEADER ═══ -->
+<!-- HEADER -->
 <header class="db-header">
     <div class="container db-header__inner">
         <a href="../index.html" class="db-logo db-logo--img">
-            <img src="../assets/img/logo.png" alt="SportClub" class="db__logo-img">
+            <img src="../assets/img/logo.png" alt="SportClub"
+                 style="height:32px;width:auto;object-fit:contain;
+                        filter:drop-shadow(0 2px 6px rgba(242,183,5,0.2));">
         </a>
         <div class="db-header__actions">
-            <a href="#" class="db-action-btn">👤 Mi Perfil</a>
-            <a href="perfil.html" class="db-action-btn">👤 Mi Perfil</a>
-            <a href="../index.html" class="db-action-btn db-action-btn--logout" onclick="localStorage.clear()">→ Cerrar Sesión</a>
+            <a href="perfil.html" class="db-action-btn">
+                👤 <span id="nombre-usuario">Admin</span>
+            </a>
+            <a href="#" class="db-action-btn db-action-btn--logout">→ Cerrar Sesión</a>
         </div>
     </div>
 </header>
 
 <div class="db-layout">
 
-    <!-- ═══ SIDEBAR ═══ -->
+    <!-- SIDEBAR -->
     <aside class="db-sidebar">
         <div class="db-nav-section">
             <span class="db-nav-label">Principal</span>
-            <nav>
-                <ul>
-                    <li>
-                        <a href="#" class="db-nav-link active">
-                            <span class="db-nav-icon">👑</span> Inicio
-                        </a>
-                    </li>
-                    <li>
-                        <a href="usuarios.html" class="db-nav-link">
-                            <span class="db-nav-icon">👥</span> Usuarios
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="db-nav-link">
-                            <span class="db-nav-icon">📊</span> Reportes
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="db-nav-link">
-                            <span class="db-nav-icon">⚙️</span> Configuración
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="db-nav-link">
-                            <span class="db-nav-icon">🏋️</span> Clases
-                        </a>
-                    </li>
-                </ul>
-            </nav>
+            <nav><ul>
+                <li><a href="#" class="db-nav-link active">
+                    <span class="db-nav-icon">👑</span> Inicio</a></li>
+                <li><a href="usuarios.html" class="db-nav-link">
+                    <span class="db-nav-icon">👥</span> Usuarios</a></li>
+                <li><a href="#" class="db-nav-link">
+                    <span class="db-nav-icon">📊</span> Reportes</a></li>
+                <li><a href="#" class="db-nav-link">
+                    <span class="db-nav-icon">⚙️</span> Configuración</a></li>
+                <li><a href="#" class="db-nav-link">
+                    <span class="db-nav-icon">🏋️</span> Clases</a></li>
+            </ul></nav>
         </div>
         <div class="db-nav-section">
             <span class="db-nav-label">Sistema</span>
-            <nav>
-                <ul>
-                    <li>
-                        <a href="#" class="db-nav-link">
-                            <span class="db-nav-icon">🔔</span> Notificaciones
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="db-nav-link">
-                            <span class="db-nav-icon">🛡️</span> Seguridad
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="db-nav-link">
-                            <span class="db-nav-icon">📞</span> Soporte
-                        </a>
-                    </li>
-                </ul>
-            </nav>
+            <nav><ul>
+                <li><a href="perfil.html" class="db-nav-link">
+                    <span class="db-nav-icon">👤</span> Mi Perfil</a></li>
+                <li><a href="#" class="db-nav-link">
+                    <span class="db-nav-icon">🔔</span> Notificaciones</a></li>
+            </ul></nav>
         </div>
     </aside>
 
-    <!-- ═══ CONTENIDO PRINCIPAL ═══ -->
+    <!-- CONTENIDO PRINCIPAL -->
     <main class="db-main">
 
         <div class="db-page-header">
             <div>
                 <h1 class="db-page-title">👑 Panel de Administración</h1>
-                <p class="db-page-sub">Control general del sistema SportClub — Vista completa de métricas y gestión</p>
+                <p class="db-page-sub">Control general del sistema SportClub</p>
             </div>
-            <a href="#" class="btn btn--role btn--sm">➕ Crear usuario</a>
+            <button id="btn-crear-usuario" class="btn btn--role btn--sm">➕ Crear usuario</button>
         </div>
 
-        <!-- Cards estadísticas (total usuarios, coaches, clases) -->
+        <!-- Stats DINÁMICAS desde API -->
         <div class="db-stats-grid">
             <div class="db-stat-card">
                 <span class="db-stat-label">Total usuarios</span>
-                <span class="db-stat-num">128</span>
-                <span class="db-stat-sub">↑ 12 nuevos este mes</span>
+                <span class="db-stat-num" id="stat-total-usuarios">--</span>
+                <span class="db-stat-sub">Cargando...</span>
             </div>
             <div class="db-stat-card">
                 <span class="db-stat-label">Total coaches</span>
-                <span class="db-stat-num">8</span>
-                <span class="db-stat-sub">Todos activos</span>
+                <span class="db-stat-num" id="stat-total-coaches">--</span>
+                <span class="db-stat-sub">Cargando...</span>
             </div>
             <div class="db-stat-card">
-                <span class="db-stat-label">Total clases</span>
-                <span class="db-stat-num">24</span>
-                <span class="db-stat-sub">5 disciplinas</span>
+                <span class="db-stat-label">Administradores</span>
+                <span class="db-stat-num" id="stat-total-admins">--</span>
+                <span class="db-stat-sub">Cargando...</span>
             </div>
             <div class="db-stat-card">
                 <span class="db-stat-label">Ingresos del mes</span>
-                <span class="db-stat-num">$3.2M</span>
-                <span class="db-stat-sub">↑ 8% vs mes anterior</span>
+                <span class="db-stat-num" id="stat-ingresos">$--</span>
+                <span class="db-stat-sub">↑ Calculado</span>
             </div>
         </div>
 
-        <!-- Tabla de usuarios (mínimo 5 registros: RUT, nombre, rol, estado, fecha registro) -->
+        <!-- Tabla DINÁMICA desde /api/users -->
         <h2 class="db-section-title">📋 Tabla de usuarios</h2>
         <div class="db-table-wrap">
             <table class="db-table">
                 <thead>
                     <tr>
-                        <th>RUT</th>
+                        <th>ID</th>
                         <th>Nombre completo</th>
+                        <th>Email</th>
                         <th>Rol</th>
-                        <th>Estado</th>
                         <th>Fecha de registro</th>
+                        <th>Acciones</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>12.345.678-9</td>
-                        <td>Javier Ahumada Pérez</td>
-                        <td>Usuario</td>
-                        <td><span class="badge badge--green">Activo</span></td>
-                        <td>15/03/2025</td>
-                    </tr>
-                    <tr>
-                        <td>98.765.432-1</td>
-                        <td>Ana López Soto</td>
-                        <td>Coach</td>
-                        <td><span class="badge badge--green">Activo</span></td>
-                        <td>10/01/2025</td>
-                    </tr>
-                    <tr>
-                        <td>11.111.111-1</td>
-                        <td>Carlos Soto Ramírez</td>
-                        <td>Administrador</td>
-                        <td><span class="badge badge--green">Activo</span></td>
-                        <td>01/12/2024</td>
-                    </tr>
-                    <tr>
-                        <td>22.222.222-2</td>
-                        <td>María Paz Fuentes</td>
-                        <td>Usuario</td>
-                        <td><span class="badge badge--red">Inactivo</span></td>
-                        <td>20/02/2025</td>
-                    </tr>
-                    <tr>
-                        <td>33.333.333-3</td>
-                        <td>Pedro Díaz Morales</td>
-                        <td>Coach</td>
-                        <td><span class="badge badge--green">Activo</span></td>
-                        <td>05/03/2025</td>
-                    </tr>
+                <tbody id="admin-tabla-usuarios-body">
+                    <tr><td colspan="6" style="text-align:center;padding:40px;color:#7a7491;">
+                        Cargando usuarios...
+                    </td></tr>
                 </tbody>
             </table>
         </div>
 
-        <!-- Panel de reportes: clases más solicitadas, usuarios activos, reservas del día -->
+        <!-- Panel reportes -->
         <h2 class="db-section-title">📊 Panel de reportes</h2>
         <div class="db-cards-grid">
             <div class="db-card">
                 <span class="db-card__icon">🔥</span>
                 <h3 class="db-card__title">Clase más solicitada</h3>
-                <p class="db-card__desc">Funcional HIIT lidera el mes con gran diferencia.</p>
+                <p class="db-card__desc">Funcional HIIT lidera el mes.</p>
                 <span class="badge badge--yellow">150 reservas este mes</span>
             </div>
             <div class="db-card">
                 <span class="db-card__icon">✅</span>
                 <h3 class="db-card__title">Usuarios activos</h3>
-                <p class="db-card__desc">112 de 128 socios registrados con actividad reciente.</p>
-                <span class="badge badge--green">87% de retención</span>
+                <p class="db-card__desc" id="reporte-activos">Cargando...</p>
+                <span class="badge badge--green" id="reporte-porcentaje">--% de retención</span>
             </div>
             <div class="db-card">
                 <span class="db-card__icon">📅</span>
                 <h3 class="db-card__title">Reservas de hoy</h3>
-                <p class="db-card__desc">Actividad normal para un día martes del mes.</p>
+                <p class="db-card__desc">Actividad normal del día.</p>
                 <span class="badge badge--blue">34 reservas hoy</span>
             </div>
         </div>
 
-        <!-- Configuración rápida: crear usuario, editar sistema, configuración -->
+        <!-- Configuración rápida -->
         <h2 class="db-section-title">⚙️ Configuración rápida</h2>
         <div class="db-actions">
-            <a href="#" class="btn btn--role btn--sm">➕ Crear usuario</a>
+            <button id="btn-crear-usuario-2" class="btn btn--role btn--sm">➕ Crear usuario</button>
             <a href="#" class="btn btn--ghost btn--sm">✏️ Editar sistema</a>
             <a href="#" class="btn btn--ghost btn--sm">🔧 Configuración</a>
             <a href="#" class="btn btn--ghost btn--sm">📤 Exportar datos</a>
@@ -208,5 +150,120 @@
     </main>
 </div>
 
+<script src="../js/dashboard.js"></script>
+<script>
+const usuarioActual = protegerRuta('admin');
+
+document.addEventListener('DOMContentLoaded', async () => {
+    if (!usuarioActual) return;
+
+    cargarNombreUsuario('nombre-usuario');
+    await cargarUsuariosAdmin();
+    await cargarEstadisticasAdmin();
+
+    // Botones crear usuario → redirigen a usuarios.html
+    document.querySelectorAll('#btn-crear-usuario, #btn-crear-usuario-2').forEach(btn => {
+        btn.addEventListener('click', () => {
+            window.location.href = 'usuarios.html';
+        });
+    });
+});
+
+async function cargarUsuariosAdmin() {
+    const tbody = document.getElementById('admin-tabla-usuarios-body');
+    if (!tbody) return;
+
+    try {
+        const response = await fetch('http://localhost:3000/api/users', {
+            headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
+        });
+        const data = await response.json();
+        const usuarios = data.data || data;
+
+        if (!usuarios || usuarios.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:30px;">No hay usuarios.</td></tr>';
+            return;
+        }
+
+        tbody.innerHTML = '';
+        usuarios.forEach(u => {
+            const fecha = u.createdAt ? new Date(u.createdAt).toLocaleDateString('es-CL') :
+                          u.created_at ? new Date(u.created_at).toLocaleDateString('es-CL') : '—';
+
+            const badges = {
+                admin: '<span class="badge badge--red">admin</span>',
+                coach: '<span class="badge badge--blue">coach</span>',
+                user:  '<span class="badge badge--green">user</span>'
+            };
+            const badge = badges[u.role] || u.role;
+
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${u.id || '—'}</td>
+                <td>${u.full_name || '—'}</td>
+                <td>${u.email || '—'}</td>
+                <td>${badge}</td>
+                <td>${fecha}</td>
+                <td>
+                    <button onclick="window.location.href='usuarios.html'"
+                        style="background:#f2b705;color:#000;border:none;padding:6px 12px;
+                               border-radius:6px;cursor:pointer;margin-right:6px;font-weight:700;">
+                        ✏️ Editar
+                    </button>
+                    <button onclick="eliminarUsuarioAdmin(${u.id}, '${u.full_name}')"
+                        style="background:#ef4444;color:#fff;border:none;padding:6px 12px;
+                               border-radius:6px;cursor:pointer;font-weight:700;">
+                        🗑️ Eliminar
+                    </button>
+                </td>`;
+            tbody.appendChild(tr);
+        });
+
+    } catch (error) {
+        console.error('Error:', error);
+        tbody.innerHTML = '<tr><td colspan="6" style="color:#f87171;text-align:center;padding:30px;">Error al cargar usuarios. Verifica que el backend esté activo.</td></tr>';
+    }
+}
+
+async function eliminarUsuarioAdmin(id, nombre) {
+    if (!confirm(`¿Eliminar a "${nombre}"?`)) return;
+    try {
+        await fetch(`http://localhost:3000/api/users/${id}`, {
+            method: 'DELETE',
+            headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
+        });
+        await cargarUsuariosAdmin();
+        await cargarEstadisticasAdmin();
+    } catch (e) {
+        alert('Error al eliminar usuario.');
+    }
+}
+
+async function cargarEstadisticasAdmin() {
+    try {
+        const response = await fetch('http://localhost:3000/api/users', {
+            headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
+        });
+        const data = await response.json();
+        const usuarios = data.data || data;
+
+        const total   = usuarios.length;
+        const coaches = usuarios.filter(u => u.role === 'coach').length;
+        const admins  = usuarios.filter(u => u.role === 'admin').length;
+
+        document.getElementById('stat-total-usuarios').textContent = total;
+        document.getElementById('stat-total-coaches').textContent  = coaches;
+        document.getElementById('stat-total-admins').textContent   = admins;
+        document.getElementById('stat-ingresos').textContent       = '$' + (total * 29900).toLocaleString('es-CL');
+
+        const activos = Math.floor(total * 0.87);
+        document.getElementById('reporte-activos').textContent    = `${activos} de ${total} socios activos.`;
+        document.getElementById('reporte-porcentaje').textContent = '87% de retención';
+
+    } catch (error) {
+        console.error('Error estadísticas:', error);
+    }
+}
+</script>
 </body>
 </html>

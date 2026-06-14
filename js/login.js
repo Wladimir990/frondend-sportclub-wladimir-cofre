@@ -24,6 +24,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Limpiar borde rojo al escribir
+    inputEmail.addEventListener('input', () => inputEmail.classList.remove('input-error'));
+    inputPass.addEventListener('input',  () => inputPass.classList.remove('input-error'));
+
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
@@ -37,9 +41,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const errorVal = validarLogin(email, password);
         if (errorVal) {
             mostrarMensaje(msgError, errorVal, true);
+            // Marcar inputs con borde rojo
+            if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                inputEmail.classList.add('input-error');
+            }
+            if (!password || password.length < 6) {
+                inputPass.classList.add('input-error');
+            }
             inputEmail.focus();
             return;
         }
+        // Limpiar bordes rojos si pasa validación
+        inputEmail.classList.remove('input-error');
+        inputPass.classList.remove('input-error');
 
         btnSubmit.disabled    = true;
         btnSubmit.textContent = 'Ingresando...';
