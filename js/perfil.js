@@ -4,26 +4,27 @@
 //  Endpoints: GET/PUT /api/auth/me | PUT /api/auth/me/password
 // ============================================================
 
-const API_URL = 'http://localhost:3000';
+window.API_URL = window.API_URL || 'http://localhost:3000'; // ver config.js
 
-function getToken() { return localStorage.getItem('token'); }
-
-function formatearFecha(fechaStr) {
-    if (!fechaStr) return '—';
-    const f = new Date(fechaStr);
-    return `${String(f.getDate()).padStart(2,'0')}/${String(f.getMonth()+1).padStart(2,'0')}/${f.getFullYear()}`;
-}
+// getToken(), formatearFecha() y badgeRol() ya están definidas globalmente
+// en dashboard.js (siempre se carga antes que este archivo). No se repiten
+// aquí para evitar funciones duplicadas en distintos archivos.
 
 function fechaParaInput(fechaStr) {
     if (!fechaStr) return '';
     return new Date(fechaStr).toISOString().split('T')[0];
 }
 
-function badgeRol(role) {
-    const colores = { admin:'#ef4444', coach:'#3b82f6', user:'#10b981' };
-    const color = colores[role] || '#6b7280';
-    return `<span style="background:${color};color:#fff;padding:4px 14px;
-            border-radius:50px;font-size:0.78rem;font-weight:700;">${role}</span>`;
+// Formato de datos exigido por la pauta: nombre capitalizado (cada palabra
+// con su primera letra en mayúscula), independientemente de cómo se haya
+// guardado en la base de datos.
+function capitalizarNombre(texto) {
+    if (!texto) return texto;
+    return texto
+        .toLowerCase()
+        .split(' ')
+        .map(palabra => palabra.charAt(0).toUpperCase() + palabra.slice(1))
+        .join(' ');
 }
 
 // ============================================================
@@ -43,7 +44,7 @@ async function cargarPerfil() {
         localStorage.setItem('usuario', JSON.stringify(u));
 
         // Mostrar datos en la vista
-        setTexto('perfil-nombre',  u.full_name);
+        setTexto('perfil-nombre',  capitalizarNombre(u.full_name));
         setTexto('perfil-email',   u.email.toLowerCase());
         setTexto('perfil-rol',     '');
         const rolEl = document.getElementById('perfil-rol');
@@ -193,17 +194,33 @@ function setVal(id, valor) {
     if (el) el.value = valor || '';
 }
 
+// Mapeo error → input. La mayoría sigue el patrón "err-X" -> "X", salvo
+// err-pass-confirm cuyo input real es "pass-confirmar" (no "pass-confirm").
+const MAPA_ERROR_INPUT = {
+    'err-pass-confirm': 'pass-confirmar'
+};
+
 function mostrarError(id, texto) {
     const el = document.getElementById(id);
     if (!el) return;
     el.textContent   = texto;
     el.style.display = 'block';
+
+    // Además del mensaje, marcamos el input con borde rojo (requisito de la pauta)
+    const inputId = MAPA_ERROR_INPUT[id] || id.replace('err-', '');
+    const input = document.getElementById(inputId);
+    if (input) input.classList.add('input-error');
 }
 
 function limpiarErrores(ids) {
     ids.forEach(id => {
         const el = document.getElementById(id);
         if (el) { el.textContent = ''; el.style.display = 'none'; }
+
+        // Quitamos también el borde rojo del input asociado, si existe
+        const inputId = MAPA_ERROR_INPUT[id] || id.replace('err-', '');
+        const input = document.getElementById(inputId);
+        if (input) input.classList.remove('input-error');
     });
 }
 
