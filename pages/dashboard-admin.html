@@ -1,269 +1,197 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Administrador | SportClub</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,600;0,700;0,800;0,900;1,700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=DM+Sans:wght@400;500;700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="../css/style.css">
 </head>
+
 <body class="dashboard-body" data-role="admin">
 
-<!-- HEADER -->
-<header class="db-header">
-    <div class="container db-header__inner">
-        <a href="../index.html" class="db-logo db-logo--img">
-            <img src="../assets/img/logo.png" alt="SportClub"
-                 style="height:32px;width:auto;object-fit:contain;
-                        filter:drop-shadow(0 2px 6px rgba(242,183,5,0.2));">
-        </a>
-        <div class="db-header__actions">
-            <a href="perfil.html" class="db-action-btn">
-                👤 <span id="nombre-usuario">Admin</span>
+    <header class="db-header">
+        <div class="container db-header__inner">
+            <a href="../index.html" class="db-logo db-logo--img">
+                <img src="../assets/img/logo.png" alt="SportClub" style="height:32px; width:auto; object-fit:contain;">
             </a>
-            <a href="#" class="db-action-btn db-action-btn--logout">→ Cerrar Sesión</a>
+            <div class="db-header__actions">
+                <a href="perfil.html" class="db-action-btn">
+                    👑 <span id="admin-nombre">Cargando...</span>
+                </a>
+                <a href="#" onclick="cerrarSesion(); return false;" class="db-action-btn db-action-btn--logout">→ Cerrar
+                    Sesión</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="db-layout">
+        <aside class="db-sidebar">
+            <div class="db-nav-section">
+                <span class="db-nav-label">Principal</span>
+                <nav>
+                    <ul>
+                        <li><a href="dashboard-admin.html" class="db-nav-link active"><span
+                                    class="db-nav-icon">📊</span> Panel Inicio</a></li>
+                        <li><a href="usuarios.html" class="db-nav-link"><span class="db-nav-icon">👥</span> Gestionar
+                                Usuarios</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="db-nav-section">
+                <span class="db-nav-label">Configuración</span>
+                <nav>
+                    <ul>
+                        <li><a href="perfil.html" class="db-nav-link"><span class="db-nav-icon">👤</span> Mi Perfil</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </aside>
+
+        <main class="db-main">
+            <div class="db-page-header">
+                <div>
+                    <h1 class="db-page-title">👑 Panel de Control Administrativo</h1>
+                    <p class="db-page-sub">Métricas globales y administración general de cuentas de SportClub</p>
+                </div>
+                <button onclick="abrirModalNuevo()" class="btn btn--role btn--sm"
+                    style="background: #10b981; color: #fff;">➕ Registrar Usuario</button>
+            </div>
+
+            <div class="db-stats-grid" style="margin-bottom: 32px;">
+                <div class="db-stat-card">
+                    <span class="db-stat-label">Usuarios Totales</span>
+                    <span class="db-stat-num" id="stat-total-usuarios">—</span>
+                    <span class="db-stat-sub">Socio y cuentas activas</span>
+                </div>
+                <div class="db-stat-card">
+                    <span class="db-stat-label">Cuerpo Técnico (Coaches)</span>
+                    <span class="db-stat-num" id="stat-total-coaches">—</span>
+                    <span class="db-stat-sub">Profesionales registrados</span>
+                </div>
+                <div class="db-stat-card">
+                    <span class="db-stat-label">Administradores</span>
+                    <span class="db-stat-num" id="stat-total-admins">—</span>
+                    <span class="db-stat-sub">Accesos de TI y Gestión</span>
+                </div>
+                <div class="db-stat-card">
+                    <span class="db-stat-label">Ingreso Estimado Mensual</span>
+                    <span class="db-stat-num" id="stat-ingresos" style="color: var(--brand-gold);">—</span>
+                    <span class="db-stat-sub" id="reporte-activos">Calculando base de membresías...</span>
+                </div>
+            </div>
+
+            <h2 class="db-section-title">👥 Listado General de Cuentas</h2>
+            <div class="db-table-wrap">
+                <table class="db-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre completo</th>
+                            <th>Email</th>
+                            <th>Rol Asignado</th>
+                            <th>Fecha Registro</th>
+                            <th>Acciones de Control</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-usuarios-body">
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <div id="modal-usuario" class="auth-page"
+        style="display: none; position: fixed; inset: 0; background: rgba(8,6,16,0.95); z-index: 9999; align-items: center; justify-content: center; backdrop-filter: blur(10px);">
+        <div class="auth-card"
+            style="width: 100%; max-width: 480px; box-shadow: 0 20px 50px rgba(0,0,0,0.6); border: 1px solid var(--line);">
+            <h2 class="auth-title" id="modal-titulo">➕ Nuevo Usuario</h2>
+            <p class="auth-sub" id="pass-hint" style="display:none; color: var(--brand-gold);">Deja la contraseña vacía
+                si no deseas alterarla.</p>
+
+            <form id="form-usuario" class="auth-form" style="margin-top: 20px;">
+                <input type="hidden" id="modal-id">
+
+                <div class="form-group">
+                    <label>Nombre Completo</label>
+                    <input type="text" id="modal-nombre" placeholder="Ej. Carlos Silva">
+                    <span id="err-modal-nombre" class="form-field-error"
+                        style="display:none; color:#f87171; font-size:0.8rem; margin-top:4px;"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>Correo Electrónico</label>
+                    <input type="email" id="modal-email" placeholder="ejemplo@sportclub.cl">
+                    <span id="err-modal-email" class="form-field-error"
+                        style="display:none; color:#f87171; font-size:0.8rem; margin-top:4px;"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>Rol de Acceso</label>
+                    <select id="modal-rol"
+                        style="width: 100%; padding: 14px 18px; background: rgba(255,255,255,0.04); border: 1px solid var(--line); border-radius: var(--radius); color: var(--text-primary); font-family: var(--font-body);">
+                        <option value="user" style="background: var(--brand-black);">user</option>
+                        <option value="coach" style="background: var(--brand-black);">coach</option>
+                        <option value="admin" style="background: var(--brand-black);">admin</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Contraseña</label>
+                    <input type="password" id="modal-password" placeholder="Mínimo 8 caracteres">
+                    <span id="err-modal-password" class="form-field-error"
+                        style="display:none; color:#f87171; font-size:0.8rem; margin-top:4px;"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>Confirmar Contraseña</label>
+                    <input type="password" id="modal-confirm" placeholder="Confirme la clave anterior">
+                    <span id="err-modal-confirm" class="form-field-error"
+                        style="display:none; color:#f87171; font-size:0.8rem; margin-top:4px;"></span>
+                </div>
+
+                <span id="err-modal-general" class="form-field-error"
+                    style="display:none; color:#f87171; font-size:0.85rem; margin: 12px 0; display:block;"></span>
+
+                <div style="display: flex; gap: 12px; margin-top: 20px;">
+                    <button type="button" onclick="cerrarModal()" class="btn btn--ghost btn--sm"
+                        style="flex: 1;">Cancelar</button>
+                    <button type="submit" id="btn-guardar-usuario" class="btn btn--role btn--sm"
+                        style="flex: 1; background: var(--admin-color, #ef4444); color:#fff;">💾 Guardar Datos</button>
+                </div>
+            </form>
         </div>
     </div>
-</header>
 
-<div class="db-layout">
+    <div id="toast"
+        style="display: none; position: fixed; bottom: 25px; left: 25px; background: #10b981; color: white; padding: 14px 24px; border-radius: var(--radius); z-index: 10000; font-weight: 600; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+    </div>
 
-    <!-- SIDEBAR -->
-    <aside class="db-sidebar">
-        <div class="db-nav-section">
-            <span class="db-nav-label">Principal</span>
-            <nav><ul>
-                <li><a href="#" class="db-nav-link active">
-                    <span class="db-nav-icon">👑</span> Inicio</a></li>
-                <li><a href="usuarios.html" class="db-nav-link">
-                    <span class="db-nav-icon">👥</span> Usuarios</a></li>
-                <li><a href="#" class="db-nav-link">
-                    <span class="db-nav-icon">📊</span> Reportes</a></li>
-                <li><a href="#" class="db-nav-link">
-                    <span class="db-nav-icon">⚙️</span> Configuración</a></li>
-                <li><a href="#" class="db-nav-link">
-                    <span class="db-nav-icon">🏋️</span> Clases</a></li>
-            </ul></nav>
-        </div>
-        <div class="db-nav-section">
-            <span class="db-nav-label">Sistema</span>
-            <nav><ul>
-                <li><a href="perfil.html" class="db-nav-link">
-                    <span class="db-nav-icon">👤</span> Mi Perfil</a></li>
-                <li><a href="#" class="db-nav-link">
-                    <span class="db-nav-icon">🔔</span> Notificaciones</a></li>
-            </ul></nav>
-        </div>
-    </aside>
-
-    <!-- CONTENIDO PRINCIPAL -->
-    <main class="db-main">
-
-        <div class="db-page-header">
-            <div>
-                <h1 class="db-page-title">👑 Panel de Administración</h1>
-                <p class="db-page-sub">Control general del sistema SportClub</p>
-            </div>
-            <button id="btn-crear-usuario" class="btn btn--role btn--sm">➕ Crear usuario</button>
-        </div>
-
-        <!-- Stats DINÁMICAS desde API -->
-        <div class="db-stats-grid">
-            <div class="db-stat-card">
-                <span class="db-stat-label">Total usuarios</span>
-                <span class="db-stat-num" id="stat-total-usuarios">--</span>
-                <span class="db-stat-sub">Cargando...</span>
-            </div>
-            <div class="db-stat-card">
-                <span class="db-stat-label">Total coaches</span>
-                <span class="db-stat-num" id="stat-total-coaches">--</span>
-                <span class="db-stat-sub">Cargando...</span>
-            </div>
-            <div class="db-stat-card">
-                <span class="db-stat-label">Administradores</span>
-                <span class="db-stat-num" id="stat-total-admins">--</span>
-                <span class="db-stat-sub">Cargando...</span>
-            </div>
-            <div class="db-stat-card">
-                <span class="db-stat-label">Ingresos del mes</span>
-                <span class="db-stat-num" id="stat-ingresos">$--</span>
-                <span class="db-stat-sub">↑ Calculado</span>
-            </div>
-        </div>
-
-        <!-- Tabla DINÁMICA desde /api/users -->
-        <h2 class="db-section-title">📋 Tabla de usuarios</h2>
-        <div class="db-table-wrap">
-            <table class="db-table">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Nombre completo</th>
-                        <th>Email</th>
-                        <th>Rol</th>
-                        <th>Fecha de registro</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody id="admin-tabla-usuarios-body">
-                    <tr><td colspan="6" style="text-align:center;padding:40px;color:#7a7491;">
-                        Cargando usuarios...
-                    </td></tr>
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Panel reportes -->
-        <h2 class="db-section-title">📊 Panel de reportes</h2>
-        <div class="db-cards-grid">
-            <div class="db-card">
-                <span class="db-card__icon">🔥</span>
-                <h3 class="db-card__title">Clase más solicitada</h3>
-                <p class="db-card__desc">Funcional HIIT lidera el mes.</p>
-                <span class="badge badge--yellow">150 reservas este mes</span>
-            </div>
-            <div class="db-card">
-                <span class="db-card__icon">✅</span>
-                <h3 class="db-card__title">Usuarios activos</h3>
-                <p class="db-card__desc" id="reporte-activos">Cargando...</p>
-                <span class="badge badge--green" id="reporte-porcentaje">--% de retención</span>
-            </div>
-            <div class="db-card">
-                <span class="db-card__icon">📅</span>
-                <h3 class="db-card__title">Reservas de hoy</h3>
-                <p class="db-card__desc">Actividad normal del día.</p>
-                <span class="badge badge--blue">34 reservas hoy</span>
-            </div>
-        </div>
-
-        <!-- Configuración rápida -->
-        <h2 class="db-section-title">⚙️ Configuración rápida</h2>
-        <div class="db-actions">
-            <button id="btn-crear-usuario-2" class="btn btn--role btn--sm">➕ Crear usuario</button>
-            <a href="#" class="btn btn--ghost btn--sm">✏️ Editar sistema</a>
-            <a href="#" class="btn btn--ghost btn--sm">🔧 Configuración</a>
-            <a href="#" class="btn btn--ghost btn--sm">📤 Exportar datos</a>
-        </div>
-
-    </main>
-</div>
-
+    <script src="../js/config.js"></script>
 <script src="../js/dashboard.js"></script>
-<script>
-const usuarioActual = protegerRuta('admin');
+    <script src="../js/usuarios.js"></script>
+    <script src="../js/admin.js"></script>
+    <script>
+        // Protección de ruta e inicialización por rol admin
+        const usuarioActual = protegerRuta('admin');
 
-document.addEventListener('DOMContentLoaded', async () => {
-    if (!usuarioActual) return;
+        document.addEventListener('DOMContentLoaded', async () => {
+            if (!usuarioActual) return;
 
-    cargarNombreUsuario('nombre-usuario');
-    await cargarUsuariosAdmin();
-    await cargarEstadisticasAdmin();
+            // Pone el nombre real del administrador logueado en el header
+            cargarNombreUsuario('admin-nombre');
 
-    // Botones crear usuario → redirigen a usuarios.html
-    document.querySelectorAll('#btn-crear-usuario, #btn-crear-usuario-2').forEach(btn => {
-        btn.addEventListener('click', () => {
-            window.location.href = 'usuarios.html';
+            // Carga la lista de usuarios en la tabla y calcula los contadores superiores de la API
+            if (typeof cargarUsuarios === 'function') await cargarUsuarios();
+            if (typeof cargarEstadisticasDashboard === 'function') await cargarEstadisticasDashboard();
         });
-    });
-});
-
-async function cargarUsuariosAdmin() {
-    const tbody = document.getElementById('admin-tabla-usuarios-body');
-    if (!tbody) return;
-
-    try {
-        const response = await fetch('http://localhost:3000/api/users', {
-            headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
-        });
-        const data = await response.json();
-        const usuarios = data.data || data;
-
-        if (!usuarios || usuarios.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:30px;">No hay usuarios.</td></tr>';
-            return;
-        }
-
-        tbody.innerHTML = '';
-        usuarios.forEach(u => {
-            const fecha = u.createdAt ? new Date(u.createdAt).toLocaleDateString('es-CL') :
-                          u.created_at ? new Date(u.created_at).toLocaleDateString('es-CL') : '—';
-
-            const badges = {
-                admin: '<span class="badge badge--red">admin</span>',
-                coach: '<span class="badge badge--blue">coach</span>',
-                user:  '<span class="badge badge--green">user</span>'
-            };
-            const badge = badges[u.role] || u.role;
-
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>${u.id || '—'}</td>
-                <td>${u.full_name || '—'}</td>
-                <td>${u.email || '—'}</td>
-                <td>${badge}</td>
-                <td>${fecha}</td>
-                <td>
-                    <button onclick="window.location.href='usuarios.html'"
-                        style="background:#f2b705;color:#000;border:none;padding:6px 12px;
-                               border-radius:6px;cursor:pointer;margin-right:6px;font-weight:700;">
-                        ✏️ Editar
-                    </button>
-                    <button onclick="eliminarUsuarioAdmin(${u.id}, '${u.full_name}')"
-                        style="background:#ef4444;color:#fff;border:none;padding:6px 12px;
-                               border-radius:6px;cursor:pointer;font-weight:700;">
-                        🗑️ Eliminar
-                    </button>
-                </td>`;
-            tbody.appendChild(tr);
-        });
-
-    } catch (error) {
-        console.error('Error:', error);
-        tbody.innerHTML = '<tr><td colspan="6" style="color:#f87171;text-align:center;padding:30px;">Error al cargar usuarios. Verifica que el backend esté activo.</td></tr>';
-    }
-}
-
-async function eliminarUsuarioAdmin(id, nombre) {
-    if (!confirm(`¿Eliminar a "${nombre}"?`)) return;
-    try {
-        await fetch(`http://localhost:3000/api/users/${id}`, {
-            method: 'DELETE',
-            headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
-        });
-        await cargarUsuariosAdmin();
-        await cargarEstadisticasAdmin();
-    } catch (e) {
-        alert('Error al eliminar usuario.');
-    }
-}
-
-async function cargarEstadisticasAdmin() {
-    try {
-        const response = await fetch('http://localhost:3000/api/users', {
-            headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
-        });
-        const data = await response.json();
-        const usuarios = data.data || data;
-
-        const total   = usuarios.length;
-        const coaches = usuarios.filter(u => u.role === 'coach').length;
-        const admins  = usuarios.filter(u => u.role === 'admin').length;
-
-        document.getElementById('stat-total-usuarios').textContent = total;
-        document.getElementById('stat-total-coaches').textContent  = coaches;
-        document.getElementById('stat-total-admins').textContent   = admins;
-        document.getElementById('stat-ingresos').textContent       = '$' + (total * 29900).toLocaleString('es-CL');
-
-        const activos = Math.floor(total * 0.87);
-        document.getElementById('reporte-activos').textContent    = `${activos} de ${total} socios activos.`;
-        document.getElementById('reporte-porcentaje').textContent = '87% de retención';
-
-    } catch (error) {
-        console.error('Error estadísticas:', error);
-    }
-}
-</script>
+    </script>
 </body>
+
 </html>
