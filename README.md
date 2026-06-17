@@ -1,136 +1,98 @@
-# 🏋️ SportClub — Sistema Web Estático
+# SportClub — Sistema con Login, CRUD de Usuarios y Perfil
 
-**Evaluación Sumativa 1: Desarrollo de sitio web estático utilizando HTML5 y CSS3 (20%)**
-
-| Campo | Detalle |
-|-------|---------|
-| **Institución** | INACAP |
-| **Asignatura** | Programación Front End (T13V31) |
-| **Docente** | Javier Ahumada |
-| **Estudiante** | Saud Wladimir Cofré Encina |
-| **Año** | 2026 |
+Evaluación Sumativa 2: Desarrollo FrontEnd con API (35%)
+Programación Front End (TI3V31) — INACAP La Serena
+Docente: Javier Ahumada
+Estudiante: Saud Wladimir Cofré Encina — 2026
 
 ---
 
-## 🌐 Demo en vivo
+## De qué se trata
 
-> [Ver sitio en GitHub Pages](https://TU-USUARIO.github.io/sportclub)
+En la evaluación pasada el sitio era estático, solo HTML y CSS, con datos fijos
+escritos a mano. En esta evolucionó: ahora el frontend habla con un backend real
+(Node + Express + SQLite) usando `fetch()`, así que el login, el registro y la
+gestión de usuarios trabajan con datos que de verdad están guardados en una base
+de datos, no inventados en el código.
 
----
+Para que funcione necesitás tener corriendo el backend (`Backend-ClubDeportivo`)
+en `http://localhost:3000`. Este repo es solo el frontend.
 
-## 📋 Descripción del Proyecto
+## Qué hace
 
-SportClub es un sistema web estático desarrollado con HTML5 y CSS3 puro (sin JavaScript) para un club deportivo que busca digitalizar sus procesos internos. Incluye landing page completa, formularios de autenticación y tres dashboards diferenciados visualmente por rol de usuario.
+- Login y registro contra la API, con validaciones y mensajes de error en pantalla
+  (nada de `alert()`).
+- Cuando entrás, te manda automáticamente a tu dashboard según tu rol: usuario,
+  coach o admin.
+- Si sos admin, podés crear, editar y eliminar usuarios desde una tabla conectada
+  a la API.
+- Cualquier usuario puede ver y editar su perfil, y cambiar su contraseña.
 
----
-
-## 🗂️ Estructura del Proyecto
+## Estructura de carpetas
 
 ```
-sportclub/
-│
-├── index.html                    ← Landing Page principal
-│
-├── css/
-│   └── style.css                 ← Hoja de estilos global
-│
-├── js/                           ← (Reservado, sin JS en esta evaluación)
-│
-├── assets/
-│   └── img/                      ← Imágenes y recursos
-│
-├── pages/
-│   ├── login.html                ← Formulario de inicio de sesión
-│   ├── registro.html             ← Formulario de registro
-│   ├── recuperacion.html         ← Recuperación de contraseña
-│   ├── dashboard-usuario.html    ← Dashboard rol Usuario (azul)
-│   ├── dashboard-coach.html      ← Dashboard rol Coach (verde)
-│   └── dashboard-admin.html      ← Dashboard rol Administrador (rojo)
-│
-├── README.md
-└── IA.md
+frontend-sportclub/
+├── index.html
+├── css/style.css
+├── js/
+│   ├── config.js       → acá está la URL del backend, una sola vez
+│   ├── dashboard.js     → funciones que comparten todos los dashboards
+│   ├── login.js
+│   ├── registro.js
+│   ├── perfil.js
+│   ├── usuarios.js      → CRUD de usuarios (admin)
+│   └── admin.js         → estadísticas del panel admin
+├── assets/img/
+└── pages/
+    ├── login.html
+    ├── registro.html
+    ├── recuperacion.html
+    ├── perfil.html
+    ├── usuarios.html        → gestión de usuarios (admin)
+    ├── dashboard-usuario.html
+    ├── dashboard-coach.html
+    └── dashboard-admin.html
 ```
 
----
+## Endpoints que se usan
 
-## 🧩 Módulos desarrollados
+| Qué hace | Método | Ruta | Necesita token |
+|---|---|---|---|
+| Login | POST | /api/auth/login | No |
+| Registro | POST | /api/auth/register | No |
+| Ver mi perfil | GET | /api/auth/me | Sí |
+| Editar mi perfil | PUT | /api/auth/me | Sí |
+| Cambiar contraseña | PUT | /api/auth/me/password | Sí |
+| Listar usuarios | GET | /api/users | Sí |
+| Ver un usuario | GET | /api/users/:id | Sí |
+| Crear usuario | POST | /api/users | Sí |
+| Editar usuario | PUT | /api/users/:id | Sí |
+| Eliminar usuario | DELETE | /api/users/:id | Sí |
 
-### Landing Page
-- ✅ Header fijo con logo y navegación completa (Inicio, Beneficios, Planes, Sobre el Club, Contacto, Login)
-- ✅ Hero section con título, descripción, botones y estadísticas del club
-- ✅ Beneficios: 6 cards con número, ícono, título y descripción
-- ✅ Planes: 3 planes con nombre, precio, período y lista de beneficios por plan
-- ✅ Sobre el Club: historia breve, misión, visión y valores
-- ✅ Contacto: correo, teléfono, dirección, redes sociales y horarios
-- ✅ Footer completo con navegación, contacto, redes y accesos de revisión
+Todas las llamadas mandan el token en el header `Authorization: Bearer <token>`
+cuando hace falta.
 
-### Formularios
-- ✅ **Login**: campos correo/contraseña, botón ingresar, link recuperación, link registro, mensajes de feedback preparados, accesos rápidos a los 3 dashboards
-- ✅ **Registro**: nombre, correo, teléfono (opcional), contraseña, confirmar contraseña, 3 mensajes de feedback visuales (error coincidencia, error correo, éxito)
-- ✅ **Recuperación**: campo correo, mensaje de confirmación integrado (sin `alert()`), link de volver
+## Validaciones
 
-### Dashboards
-| Dashboard | Color | Contenido obligatorio cubierto |
-|-----------|-------|-------------------------------|
-| **Usuario** | 🔵 Azul | Bienvenida + mensaje motivacional, 5 reservas (clase, día, hora, coach, estado), 3 clases disponibles con ícono + descripción + botón, perfil rápido completo |
-| **Coach** | 🟢 Verde | Panel resumen 4 métricas, tabla 5 alumnos (nombre, correo, clase, estado), 3 clases asignadas cards (nombre, día, hora), horario semanal tabla 5 filas (clase, día, hora inicio, fin, alumnos) |
-| **Admin** | 🔴 Rojo | 4 cards estadísticas (usuarios, coaches, clases, ingresos), tabla 5 usuarios (RUT, nombre, rol, estado, fecha), panel reportes 3 cards, configuración rápida 4 botones |
+Todos los formularios revisan que los campos obligatorios estén completos, que el
+email tenga formato válido, y que la contraseña tenga mínimo 8 caracteres con
+letras y números, con confirmación. Los errores se muestran debajo de cada campo,
+en rojo, no con `alert()`.
 
----
+## Diseño
 
-## 🎨 Sistema de diseño
+Se mantuvo la misma paleta y tipografía de la evaluación anterior (fondo oscuro,
+acentos morado/dorado, `Barlow Condensed` para títulos y `DM Sans` para el cuerpo),
+y cada rol tiene su color: azul para usuario, verde para coach, rojo para admin.
 
-### Tipografía
-- **Display / Títulos:** `Barlow Condensed` (condensada, deportiva, 900 weight)
-- **Cuerpo / Texto:** `DM Sans` (legible, moderna, 300-700)
+## Cómo correrlo
 
-### Paleta corporativa
-
-| Variable | Color | Uso |
-|----------|-------|-----|
-| `--brand-gold` | `#F2B705` | Acento principal, CTAs |
-| `--brand-purple` | `#2E1A47` | Color corporativo secundario |
-| `--brand-black` | `#080610` | Fondo principal |
-| `--usuario-color` | `#3B82F6` | Identidad Dashboard Usuario |
-| `--coach-color` | `#10B981` | Identidad Dashboard Coach |
-| `--admin-color` | `#EF4444` | Identidad Dashboard Admin |
-
-### Animaciones CSS puras
-- `fadeUp`: entrada progresiva de elementos hero
-- `fadeIn`: carga general de dashboards
-- `pulseGold`: efecto de pulso en el indicador del eyebrow
-- `shimmer`: efecto de brillo en textos destacados
+1. En la carpeta del backend: `npm install` y después `npm run dev`. Tiene que
+   quedar escuchando en el puerto 3000.
+2. Abrí este frontend con Live Server y entrá a `pages/login.html`.
+3. Desde el login hay accesos directos a los 3 dashboards para revisar sin tener
+   que loguearte manualmente.
 
 ---
 
-## ✅ Criterios de evaluación cubiertos
-
-- [x] Landing Page completa y profesional con todas las secciones
-- [x] Formularios completos con estructura visual de feedback preparada
-- [x] Dashboard Usuario con todos los contenidos requeridos
-- [x] Dashboard Coach con todos los contenidos requeridos
-- [x] Dashboard Administrador con todos los contenidos requeridos
-- [x] Diferenciación visual por rol: header, logo, nav activa, stat-numbers, botones de acción, hover de cards
-- [x] HTML5 semántico (`header`, `nav`, `main`, `aside`, `section`, `article`, `footer`, `dl`, `dt`, `dd`)
-- [x] CSS3 moderno: variables `:root`, Grid, Flexbox, `clamp()`, `@keyframes`, `backdrop-filter`
-- [x] Diseño responsive con media queries (1024px, 768px, 480px)
-- [x] Sin JavaScript, sin `alert()` para mensajes
-- [x] Todos los enlaces funcionales y sin destinos rotos
-- [x] `README.md` e `IA.md` incluidos
-
----
-
-## 🛠️ Tecnologías
-
-- **HTML5** — Estructura semántica completa
-- **CSS3** — Variables, Grid, Flexbox, animaciones, responsive
-- **Google Fonts** — Barlow Condensed + DM Sans
-
-> ⚠️ **Sin JavaScript** — Proyecto 100% HTML + CSS según los requisitos de la evaluación.
-
----
-
-## 👨‍💻 Autor
-
-**Saud Wladimir Cofré Encina**
-Estudiante INACAP · Programación Front End T13V31 · 2026
+**Saud Wladimir Cofré Encina** — Programación Front End TI3V31 — 2026

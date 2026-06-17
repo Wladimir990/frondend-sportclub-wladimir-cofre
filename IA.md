@@ -1,106 +1,113 @@
-# Guía de Uso de IA y Documentación de Desarrollo — SportClub
+# Uso de IA — SportClub (Evaluación 2)
 
-## 1. Identificación del Proyecto y Estudiante
-
-| Campo | Detalle |
-|-------|---------|
-| **Institución** | INACAP |
-| **Asignatura** | Programación Front End (Código T13V31) |
-| **Evaluación** | Evaluación Sumativa 1: Desarrollo de sitio web estático con HTML5 y CSS3 |
-| **Docente** | Javier Ahumada |
-| **Estudiante** | Saud Wladimir Cofré Encina |
+INACAP La Serena — Programación Front End (TI3V31)
+Docente: Javier Ahumada
+Estudiante: Saud Wladimir Cofré Encina — 2026
 
 ---
 
-## 2. Registro de Uso de Inteligencia Artificial
+Acá registro en qué momentos usé IA (Claude, de Anthropic) durante esta evaluación
+y qué hice con lo que me dio. La usé sobre todo para destrabar errores y revisar
+que el proyecto cumpliera lo que pedía la pauta, no para que me armara el sitio
+de cero — eso ya lo tenía hecho desde la Evaluación 1 y lo fui conectando a la
+API yo mismo.
 
-### Bitácora de Prompts y Modificaciones
+## 1. El dashboard no cargaba los datos
 
----
+Me tiraba error en la consola al entrar al panel de admin: `Failed to fetch` y
+`net::ERR_CONNECTION_REFUSED`. Le mandé las capturas de la consola a Claude y me
+explicó que ese error específico significa que el navegador ni siquiera logra
+conectarse al backend — no es un problema del código del frontend, es que el
+servidor no está corriendo. Revisé y efectivamente no tenía levantado el backend
+con `npm run dev`. Lo prendí y el error desapareció.
 
-#### Módulo 1 — Estructura Base y Landing Page
+## 2. Error raro de "Identifier ya declarado"
 
-- **Herramienta:** Gemini Chat
-- **Fecha:** 31/05/2026
-- **Prompt utilizado:**
-  > *"Crea una estructura HTML semántica con header, main, section de beneficios, planes, sobre el club y un footer profesional adaptado a un club deportivo llamado SportClub con los colores morado oscuro #2E1A47 y amarillo #F2B705."*
+Después me apareció `Identifier 'API_URL' has already been declared`. Resulta que
+yo había puesto `const API_URL = '...'` repetido en varios archivos JS distintos
+(`dashboard.js`, `login.js`, `perfil.js`, `registro.js`, `usuarios.js`, `admin.js`),
+y cuando dos de esos archivos se cargan juntos en la misma página, el navegador
+explota porque no podés declarar la misma constante dos veces en el mismo scope.
 
-- **Resultado generado:** Estructura HTML base con secciones y una hoja de estilos inicial con variables `:root`.
+Con Claude armamos una solución que evita que esto vuelva a pasar nunca, sin
+importar qué combinación de scripts cargue cada página: en vez de `const`, usar
+`window.API_URL = window.API_URL || 'http://localhost:3000';` en `config.js`. Una
+asignación a `window` se puede repetir sin error, a diferencia de un `const`. Saqué
+las declaraciones repetidas de los demás archivos y dejé `config.js` como la única
+fuente de la URL del backend.
 
-- **Modificaciones realizadas:**
-  - Se rediseñó completamente el sistema de diseño adoptando tipografía `Barlow Condensed` para display y `DM Sans` para cuerpo, eliminando el genérico Inter.
-  - Se definió una paleta de variables CSS ampliada (`--brand-black`, `--brand-dark`, `--brand-panel`, `--brand-card`, `--text-primary`, `--text-secondary`, `--text-muted`, variables de transición).
-  - Se añadió la sección `#contacto` con correo, teléfono, dirección, redes sociales y grilla de horarios — sección obligatoria omitida en el resultado generado.
-  - Se añadió el ítem "Contacto" al menú de navegación.
-  - Se enriqueció la sección "Sobre el Club" añadiendo historia breve del club (desde 2018) con diseño de línea de tiempo lateral.
-  - Cada plan de suscripción ahora incluye una lista explícita de beneficios, cumpliendo la exigencia de "nombre, precio y beneficios" de la rúbrica.
-  - Se diseñaron `@keyframes` CSS: `fadeUp`, `fadeIn`, `pulseGold` y `shimmer` para animaciones de entrada sin JavaScript.
-  - Se implementaron orbes de fondo difuminados y líneas horizontales decorativas en la sección hero con posicionamiento absoluto y CSS puro.
-  - Se añadieron `hero__stats` con 4 métricas del club (socios, sucursales, satisfacción, años) como elementos de credibilidad.
-  - Se implementaron media queries en tres breakpoints: 1024px, 768px y 480px para garantizar compatibilidad responsive completa.
+## 3. La página de "Gestionar Usuarios" estaba mal armada
 
-- **Justificación:** La IA generó una estructura funcional pero sin identidad visual diferenciadora. Las modificaciones elevan el diseño a nivel profesional, incorporan todas las secciones obligatorias de la rúbrica y añaden profundidad visual mediante técnicas CSS avanzadas que demuestran dominio del estándar CSS3.
+Me di cuenta de que el link "Gestionar Usuarios" del menú del admin llevaba a
+`usuarios.html`, pero ese archivo tenía pegado por error el contenido del
+dashboard del usuario normal (el de "Bienvenido, Javier"), no la tabla de gestión
+de cuentas. Con Claude armamos la página correcta: título, descripción, tabla con
+ID/nombre/email/rol/fecha/acciones y el botón de "Nuevo Usuario", reutilizando el
+mismo `usuarios.js` que ya tenía hecho el CRUD, y manteniendo el mismo estilo
+visual oscuro/dorado que el resto del sitio (la pauta traía una imagen de
+referencia con otro diseño, pero esa imagen solo mostraba qué tenía que tener la
+página, no de qué color tenía que ser).
 
----
+## 4. Revisión final contra la pauta
 
-#### Módulo 2 — Formularios (Login, Registro y Recuperación)
+Le pasé la pauta completa en PDF y le pedí que me dijera qué me faltaba para la
+nota máxima. Encontré dos cosas que arreglar:
 
-- **Herramienta:** Gemini Chat
-- **Fecha:** 31/05/2026
-- **Prompt utilizado:**
-  > *"Crea un formulario de Login centrado en pantalla, dentro de una tarjeta visual tipo card, con identidad de SportClub y accesos directos a los dashboards de usuario, coach y administrador en el pie del formulario."*
+- Tenía las mismas funciones (`getToken`, `badgeRol`, `formatearFecha`) copiadas
+  en varios archivos con pequeñas diferencias. Las dejé escritas una sola vez en
+  `dashboard.js`, que es el archivo que cargan todas las páginas, y borré las
+  copias del resto.
+- En `usuarios.js` había un `alert('Acceso denegado...')` que se me había
+  colado en una función de seguridad extra (`verificarAdmin`). La pauta exige
+  que los mensajes se muestren en pantalla, no con `alert()` nativo, así que lo
+  saqué y dejé que redirija en silencio, igual que ya hacía `protegerRuta()`.
+- El `README.md` y este mismo `IA.md` todavía hablaban del proyecto de la
+  Evaluación 1 (la versión sin JavaScript). Los reescribí para que cuenten lo
+  que realmente hace este proyecto ahora.
 
-- **Resultado generado:** Formulario HTML con inputs básicos y estilos iniciales de card.
+Después de cada cambio probé que el sitio siguiera funcionando (login, crear
+usuario, editar, eliminar, ver perfil) antes de dar por terminado.
 
-- **Modificaciones realizadas:**
-  - Se rediseñó completamente la card de autenticación con `backdrop-filter: blur(32px)`, bordes con gradiente dorado superior y sombra profunda.
-  - Se añadió el componente `.auth-logo-mark` (cuadrado dorado con emoji de gimnasio) como identidad visual del formulario, reemplazando el texto plano original.
-  - Se implementó el link de retorno `auth-back` hacia la landing page en todos los formularios.
-  - Se diseñó la sección de accesos de revisión docente como componente `.review-section` con tres enlaces `.review-link` diferenciados por color de rol (azul/verde/rojo).
-  - Se añadió el separador visual `auth-divider` entre el formulario y los accesos de revisión.
-  - Se añadieron tres mensajes de feedback diferentes en el formulario de registro: error de coincidencia, error de correo inválido y mensaje de éxito — con clases semánticas `.form-msg--error` y `.form-msg--success`.
-  - En recuperación, el mensaje de confirmación se integró como elemento permanente visible dentro del formulario (`form-msg--info`), cumpliendo la restricción de no usar `alert()`.
-  - Se añadió el campo de teléfono opcional al formulario de registro, como información adicional pedida por la rúbrica.
+## 5. Faltaba la landing page real
 
-- **Justificación:** La rúbrica exige formularios "completos, coherentes y visualmente profesionales" con "espacios visuales para mensajes de error, éxito y retroalimentación". Las modificaciones manuales garantizan el cumplimiento completo, elevan el nivel estético y estructuran correctamente la experiencia de usuario sin usar JavaScript.
+Mi `index.html` real (el de la Evaluación 1, con hero, beneficios, planes, sobre
+el club y contacto) se había perdido o nunca quedó subido: en su lugar había un
+formulario de login genérico sin relación con SportClub, que además apuntaba a
+un `styles.css` que no existe (mi archivo real es `style.css`). Como todas las
+páginas del proyecto enlazan de vuelta a `index.html` (el logo de cada
+dashboard, el botón "Volver al inicio" de login/registro), esto se notaba
+apenas alguien navegaba el sitio. Con Claude reconstruí la landing page
+completa usando únicamente clases que ya existían en mi propio `style.css`
+(nada inventado), así que mantiene exactamente la identidad visual
+morado/dorado original.
 
----
+## 6. Revisión visual fina contra los requisitos de la pauta
 
-#### Módulo 3 — Dashboards y Diferenciación Visual por Roles
+Volví a pasar la pauta completa (con las imágenes de referencia de los
+módulos "Usuarios" y "Perfil") y encontré dos detalles puntuales que se me
+habían escapado en la revisión anterior:
 
-- **Herramienta:** Gemini Chat
-- **Fecha:** 31/05/2026
-- **Prompt utilizado:**
-  > *"Genera tres vistas de dashboard estáticos con estructura de sidebar y header compartidos, diferenciados mediante el atributo data-role en el body: azul para usuario, verde para coach y rojo para administrador."*
+- En el modal de "Nuevo Usuario" del admin y en el formulario de "Mi Perfil",
+  cuando un campo tenía error solo se mostraba el texto en rojo debajo, pero el
+  input no se marcaba con borde rojo (sí pasaba correctamente en login y
+  registro). La pauta lo pide como obligatorio, así que agregué la misma clase
+  `input-error` que ya usaba en los otros formularios.
+- El botón "Nuevo Usuario" / "Registrar Usuario" estaba en rojo (el color de mi
+  rol admin), pero la pauta pide explícitamente azul o verde para ese botón en
+  particular. Lo cambié a verde.
+- También agregué que el nombre se muestre capitalizado en "Mi Perfil", que es
+  un detalle de formato que pedía la pauta y no tenía implementado.
 
-- **Resultado generado:** Tres archivos HTML con estructura básica de sidebar y área de contenido.
+## 7. Bug silencioso en registro.js: el borde rojo nunca se aplicaba
 
-- **Modificaciones realizadas:**
-  - Se rediseñó el sistema de clases de dashboards con nomenclatura BEM refinada: `db-header`, `db-sidebar`, `db-main`, `db-stat-card`, `db-table`, etc.
-  - Se implementó la barra lateral (`db-sidebar`) como elemento `position: fixed` con dos secciones semánticas separadas por `db-nav-label`, y en responsive se convierte en barra horizontal con `flex-wrap`.
-  - Se añadió el indicador de navegación activa `::before` (línea lateral de color del rol) en cada enlace `.db-nav-link.active`.
-  - La diferenciación visual por rol se amplió para cubrir los 6 elementos exigidos: (1) borde inferior del header, (2) color del logo, (3) fondo del logo-dot, (4) color del nav activo, (5) indicador `::before` del nav, (6) `stat-number`, (7) línea inferior de stat-card en hover, (8) borde de stat-card en hover y (9) botones `.btn--role`.
-  - Se diseñó el componente `.db-stat-card` con pseudo-elemento `::after` que aparece como barra de color del rol en el borde inferior en hover, sin necesidad de JavaScript.
-  - Se agregó el componente `.db-profile-card` con `<dl>/<dt>/<dd>` semánticos para el perfil rápido del usuario.
-  - Se completó el Dashboard Usuario con: mensaje motivacional, tabla de 5 reservas con columna de estado (badge coloreado), 3 cards de clases con ícono + descripción + botón `btn--role`, y perfil rápido con 5 campos (nombre, correo, edad, deporte favorito, plan).
-  - Se completó el Dashboard Coach con: 4 métricas en stats-grid, tabla de 5 alumnos con estado, 3 cards de clases asignadas (nombre, día, hora, alumnos, badge), tabla de horario semanal con 5 filas (clase, día, hora inicio, hora fin, cantidad alumnos).
-  - Se completó el Dashboard Admin con: 4 cards estadísticas (usuarios, coaches, clases, ingresos), tabla de 5 usuarios con todos los campos (RUT, nombre, rol, estado, fecha), panel de 3 reportes (clase más solicitada, usuarios activos, reservas del día), y 4 botones de configuración rápida.
-  - Se añadió `link rel="preconnect"` para Google Fonts en los dashboards que no lo tenían.
-
-- **Justificación:** La rúbrica exige diferenciación visual clara en header, navegación y botones principales, y contenido completo en cada dashboard. El resultado de la IA cubría la estructura básica pero la diferenciación visual era mínima y el contenido incompleto en múltiples secciones. Las modificaciones garantizan el cumplimiento íntegro de todos los criterios de la rúbrica al nivel "Excelente".
-
----
-
-## 3. Control de Calidad y Validación Técnica
-
-1. **HTML5 Semántico:** Se utilizaron exclusivamente etiquetas semánticas: `<header>`, `<nav>`, `<main>`, `<aside>`, `<section>`, `<article>`, `<footer>`, `<dl>`, `<dt>`, `<dd>`. Los `<div>` se reservan estrictamente para wrappers de layout.
-
-2. **CSS3 avanzado:** El proyecto utiliza: variables `--custom-property`, `clamp()` para tipografía fluida, `min()` para anchos responsivos, `calc()`, `grid-template-columns: repeat(auto-fit, ...)`, `backdrop-filter: blur()`, `@keyframes` para 4 animaciones CSS, pseudo-elementos `::before` y `::after`, selectores de atributo `[data-role]`, y `aspect-ratio`.
-
-3. **Sin JavaScript:** Todo el proyecto funciona íntegramente sin una sola línea de JavaScript. Los mensajes de feedback están presentes en el HTML como estructuras visuales con `display: none`. Las animaciones son exclusivamente CSS.
-
-4. **Navegación funcional:** Todos los `<a href="">` apuntan a rutas válidas dentro del árbol del proyecto. No existen botones ni links sin destino en los flujos principales de navegación.
-
-5. **Responsive Design:** Se implementaron tres breakpoints: `max-width: 1024px` (tabletas landscape), `max-width: 768px` (tabletas portrait / móviles grandes) y `max-width: 480px` (móviles pequeños).
-
-6. **Accesibilidad básica:** Todos los `<input>` tienen `<label>` asociado mediante `for`/`id`. Se usaron `<dl>/<dt>/<dd>` para listas de definición en el perfil rápido. Los colores de texto superan el contraste mínimo WCAG AA sobre fondos oscuros.
+Al revisar de nuevo con Claude antes de dar el proyecto por cerrado, encontramos
+que en `registro.js` la función `mostrarError()` sí tenía el código para poner
+el input en rojo, pero ese código dependía de un parámetro (`inputId`) que
+ninguna de las llamadas reales le pasaba — quedó como código "muerto" que nunca
+se ejecutaba. El mensaje de error sí se mostraba, pero el input nunca se
+marcaba con el borde rojo, igual que el bug que ya había corregido antes en el
+modal de admin y en el perfil. Lo arreglamos así: ahora la función deriva el
+input correspondiente directamente del `id` del propio mensaje de error (con
+un caso especial para `confirm_password`, que no calza por nombre con su
+mensaje `err-confirm`), y además agregué que el borde rojo se quite apenas el
+usuario empieza a corregir el campo, igual que ya pasaba en el login.

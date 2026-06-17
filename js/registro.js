@@ -3,7 +3,7 @@
 //  POST http://localhost:3000/api/auth/register
 // ============================================================
 
-const API_URL = 'http://localhost:3000';
+window.API_URL = window.API_URL || 'http://localhost:3000'; // ver config.js
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -25,6 +25,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // ── Mostrar/ocultar contraseña ──────────────────────────
     configurarTogglePass('toggle-password',        'password');
     configurarTogglePass('toggle-confirm-password', 'confirm_password');
+
+    // ── Limpiar borde rojo apenas el usuario empieza a corregir ─
+    [inputNombre, inputEmail, inputFecha, inputPass, inputConfirm].forEach(input => {
+        if (input) input.addEventListener('input', () => input.classList.remove('input-error'));
+    });
 
     // ── Validación en tiempo real (mientras escribe) ────────
     if (inputPass) {
@@ -171,15 +176,22 @@ function configurarTogglePass(toggleId, inputId) {
     });
 }
 
+// Mapeo error → input. La mayoría sigue el patrón "err-X" -> "X", salvo
+// err-confirm cuyo input real es "confirm_password" (no "confirm").
+const MAPA_ERROR_INPUT_REGISTRO = {
+    'err-confirm': 'confirm_password'
+};
+
 function mostrarError(el, texto, inputId = null) {
     if (!el) return;
     el.textContent   = texto;
     el.style.display = 'block';
-    // Marcar input con borde rojo
-    if (inputId) {
-        const input = document.getElementById(inputId);
-        if (input) input.classList.add('input-error');
-    }
+
+    // Marcar input con borde rojo (requisito de la pauta). Si no se pasó
+    // inputId explícito, lo derivamos del id del propio span de error.
+    const idReal = inputId || MAPA_ERROR_INPUT_REGISTRO[el.id] || el.id.replace('err-', '');
+    const input  = document.getElementById(idReal);
+    if (input) input.classList.add('input-error');
 }
 
 function limpiarErrorInput(inputId) {
@@ -192,6 +204,10 @@ function limpiarErrores(elementos) {
         if (!el) return;
         el.textContent   = '';
         el.style.display = 'none';
+
+        // Quitamos también el borde rojo del input asociado, si existe
+        const idReal = MAPA_ERROR_INPUT_REGISTRO[el.id] || el.id.replace('err-', '');
+        limpiarErrorInput(idReal);
     });
 }
 
