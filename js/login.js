@@ -3,7 +3,7 @@
 //  POST http://localhost:3000/api/auth/login
 // ============================================================
 
-const API_URL = 'http://localhost:3000';
+window.API_URL = window.API_URL || 'http://localhost:3000'; // ver config.js
 
 document.addEventListener('DOMContentLoaded', () => {
 

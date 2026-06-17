@@ -6,7 +6,7 @@
 //  - Cerrar sesión
 // ============================================================
 
-const API_URL = 'http://localhost:3000';
+window.API_URL = window.API_URL || 'http://localhost:3000'; // ver config.js
 
 // ── Protección de ruta — redirige si no hay token ───────────
 function protegerRuta(rolRequerido = null) {
@@ -33,6 +33,11 @@ function protegerRuta(rolRequerido = null) {
     return usuario;
 }
 
+// ── Obtener token guardado en localStorage (helper compartido) ──
+function getToken() {
+    return localStorage.getItem('token');
+}
+
 // ── Cargar nombre del usuario en el header ──────────────────
 function cargarNombreUsuario(idElemento = 'nombre-usuario') {
     const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
@@ -42,16 +47,12 @@ function cargarNombreUsuario(idElemento = 'nombre-usuario') {
     }
 }
 
-// ── Badge de rol con color ──────────────────────────────────
+// ── Badge de rol con color (helper compartido por dashboards) ──
 function badgeRol(role) {
-    const config = {
-        admin: { color: '#ef4444', label: 'Administrador' },
-        coach: { color: '#3b82f6', label: 'Coach' },
-        user:  { color: '#10b981', label: 'Usuario' }
-    };
-    const cfg = config[role] || { color: '#6b7280', label: role };
-    return `<span style="background:${cfg.color};color:#fff;padding:4px 14px;
-            border-radius:50px;font-size:0.78rem;font-weight:700;">${cfg.label}</span>`;
+    const colores = { admin: '#ef4444', coach: '#3b82f6', user: '#10b981' };
+    const color = colores[role] || '#6b7280';
+    return `<span style="background:${color};color:#fff;padding:4px 14px;
+            border-radius:50px;font-size:0.78rem;font-weight:700;">${role}</span>`;
 }
 
 // ── Cerrar sesión ───────────────────────────────────────────
@@ -60,8 +61,8 @@ function cerrarSesion() {
     window.location.href = 'login.html';
 }
 
-// ── Formatear fecha dd/mm/yyyy ──────────────────────────────
-function formatFecha(fechaStr) {
+// ── Formatear fecha dd/mm/yyyy (helper compartido) ──────────
+function formatearFecha(fechaStr) {
     if (!fechaStr) return '—';
     const f = new Date(fechaStr);
     if (isNaN(f)) return '—';

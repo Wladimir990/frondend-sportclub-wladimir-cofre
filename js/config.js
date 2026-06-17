@@ -4,4 +4,7 @@
 //  en cada archivo JS del proyecto.
 // ============================================================
 
-const API_URL = 'http://localhost:3000';
+// Se usa window.API_URL en lugar de "const" para que, aunque este
+// archivo se incluya más de una vez o en distinto orden que otros
+// scripts, NUNCA produzca un error de "Identifier already declared".
+window.API_URL = window.API_URL || 'http://localhost:3000';
